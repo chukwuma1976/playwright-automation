@@ -120,6 +120,7 @@ test.describe('UI Test Automation Playground Tests', () => {
             zeroOpacityBtn, visibilityHiddenBtn, displayNoneBtn, offScreenBtn
         }
 
+        await page.getByRole('button', { name: 'Hide' }).click();
         Object.keys(buttons).forEach(async (btn) => {
             const isVisible = await buttons[btn].isVisible();
             console.log(`Button ${btn} is visible: ${isVisible}`);
