@@ -1,4 +1,5 @@
-const { exec } = require('child_process');
+// const { exec } = require('child_process');
+import { exec } from 'child_process';
 
 export const executeCommand = (cmd, successCallback, errorCallback) => {
     exec(cmd, (error, stdout, stderr) => {
@@ -25,8 +26,24 @@ export const executeCommand = (cmd, successCallback, errorCallback) => {
 
 export const runAllPlaywrightTests = () => {
     executeCommand(
-        'npm playwright test',
+        'bash ./util/runAllTests.sh',
         message => console.log(message),
         errormsg => console.error(errormsg)
     );
-}; 
+};
+
+export const runThisPlayWrightTest = (test) => {
+    executeCommand(
+        `bash ./util/runASingleTest.sh '${test}'`,
+        message => console.log(message),
+        errormsg => console.error(errormsg)
+    )
+}
+
+export const runThisPlayWrightFile = (file) => {
+    executeCommand(
+        `bash ./util/runASingleFile.sh ${file}`,
+        message => console.log(message),
+        errormsg => console.error(errormsg)
+    )
+}
