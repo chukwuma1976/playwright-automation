@@ -18,7 +18,7 @@ test.describe('LetCode Tests', () => {
         await page.getByRole('link', { name: 'Courses' }).click();
         await page.locator('div:nth-child(6) > .card > .card-footer > .card-footer-item').click();
         await page.getByRole('figure').locator('iframe').contentFrame().getByRole('button', { name: 'Play', exact: true }).click();
-        await page.getByRole('figure').locator('iframe').contentFrame().getByRole('button', { name: 'Pause keyboard shortcut k' }).click({ delay: 10000 });
+        await page.getByRole('figure').locator('iframe').contentFrame().getByRole('button', { name: 'Pause keyboard shortcut k' }).click({ delay: 2000 });
     });
 
     test('Page Object Model', async ({ page }) => {
