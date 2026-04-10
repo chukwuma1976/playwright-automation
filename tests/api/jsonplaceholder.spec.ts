@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { Ajv } from 'ajv';
 
 test.describe('JSONPlaceholder Tests', () => {
 
@@ -47,6 +48,45 @@ test.describe('JSONPlaceholder Tests', () => {
         });
     });
 
+    test('GET /posts/1 with ajv validation', async ({ request }) => {
+        const expectedResponse = {
+            userId: 1,
+            id: 1,
+            title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
+            body: 'quia et suscipit\n' +
+                'suscipit recusandae consequuntur expedita et cum\n' +
+                'reprehenderit molestiae ut ut quas totam\n' +
+                'nostrum rerum est autem sunt rem eveniet architecto'
+        }
+
+        const response = await request.get(`${baseURL}/posts/1`);
+        const newPost = await response.json();
+
+        // Status validation
+        expect(response.ok()).toBeTruthy();
+        expect(response.status()).toBe(200);
+
+        // Content validation
+        expect(newPost).toMatchObject(expectedResponse);
+
+        // Schema validation
+        const schema = {
+            type: "object",
+            required: ["userId", "id", "title", "body"],
+            properties: {
+                userId: { type: "number" },
+                id: { type: "number" },
+                title: { type: "string" },
+                body: { type: "string" }
+            }
+        };
+
+        const ajv = new Ajv();
+        const validate = ajv.compile(schema);
+        const valid = validate(newPost);
+        expect(valid).toBeTruthy();
+    });
+
     test('POST /posts', async ({ request }) => {
         const newPost = {
             "userId": 1,
@@ -83,7 +123,7 @@ test.describe('JSONPlaceholder Tests', () => {
 
 });
 
-type User = {
+interface User {
     id: number;
     name: string;
     username: string;
@@ -94,7 +134,7 @@ type User = {
     company: object;
 };
 
-type Post = {
+interface Post {
     userId: number;
     id: number;
     title: string;
