@@ -34,4 +34,14 @@ export class LoginPage {
         await page.waitForURL(this.baseURL);
         expect(page.url()).toBe(this.baseURL);
     }
+
+    async clickContactUs(page: Page) {
+        await page.goto(this.baseURL);
+        await page.locator('a[href="/contact_us"]').click();
+    }
+
+    async clickTestCases(page: Page) {
+        await page.goto(this.baseURL);
+        await page.locator('a[href="/test_cases"]').click();
+    }
 }

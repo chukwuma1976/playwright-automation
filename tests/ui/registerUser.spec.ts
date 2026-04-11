@@ -25,9 +25,6 @@ test.describe('Register User UI Tests', () => {
         const landingPage = new LandingPage();
         await landingPage.userIsLoggedIn(page);
         await landingPage.clickDeleteAccountButton(page);
-
-        // await registrationPage.checkAccountDeletedHeaderIsVisible(page);
-        // await registrationPage.clickContinueButton(page);
     });
 
     test('Register user with existing email', async ({ page }) => {
