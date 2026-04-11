@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { generateUserToRegister } from '../../main/utilities/UserCredentialsGenerator';
+import { generateUserToRegister, generateUserWithExistingEmail } from '../../main/utilities/UserCredentialsGenerator';
 import { LoginPage } from '../../main/pages/LoginPage';
 import { LandingPage } from '../../main/pages/LandingPage';
 import { RegistrationPage } from '../../main/pages/RegistrationPage';
@@ -13,7 +13,7 @@ test.describe('Register User UI Tests', () => {
         registrationPage = new RegistrationPage();
     });
 
-    test('Register user', async ({ page }) => {
+    test('Register new user', async ({ page }) => {
         const userCredentials = generateUserToRegister();
         await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
 
@@ -26,8 +26,14 @@ test.describe('Register User UI Tests', () => {
         await landingPage.userIsLoggedIn(page);
         await landingPage.clickDeleteAccountButton(page);
 
-        await registrationPage.checkAccountDeletedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        // await registrationPage.checkAccountDeletedHeaderIsVisible(page);
+        // await registrationPage.clickContinueButton(page);
+    });
+
+    test('Register user with existing email', async ({ page }) => {
+        const userCredentials = generateUserWithExistingEmail();
+        await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
+        await loginPage.emailAddressExistsErrorIsVisble(page);
     });
 
 

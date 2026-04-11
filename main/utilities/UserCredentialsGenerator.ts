@@ -10,6 +10,12 @@ export function generateUserToRegister() {
     return generateUser(email, password);
 }
 
+export function generateUserWithExistingEmail() {
+    return {
+        name: "tester",
+        email: "dummy@login.com",
+    };
+}
 
 export function generateUser(email: string, password: string) {
     return {
