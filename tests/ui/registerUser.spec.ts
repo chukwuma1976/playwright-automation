@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { generateUserToRegister, generateUserWithExistingEmail } from '../../main/utilities/UserCredentialsGenerator';
 import { LoginPage } from '../../main/pages/LoginPage';
 import { LandingPage } from '../../main/pages/LandingPage';

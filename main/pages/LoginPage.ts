@@ -19,8 +19,9 @@ export class LoginPage {
     }
 
     async invalidCredentialsErrorIsVisible(page: Page) {
-        const error = page.locator('p:has-text("Your email or password")');
-        await error.isVisible();
+        const errorSelector = 'p:has-text("Your email or password")';
+        const error = page.locator(errorSelector);
+        await page.waitForSelector(errorSelector, { state: 'visible', timeout: 5000 });
         expect(error).toBeVisible();
     }
 
@@ -35,13 +36,4 @@ export class LoginPage {
         expect(page.url()).toBe(this.baseURL);
     }
 
-    async clickContactUs(page: Page) {
-        await page.goto(this.baseURL);
-        await page.locator('a[href="/contact_us"]').click();
-    }
-
-    async clickTestCases(page: Page) {
-        await page.goto(this.baseURL);
-        await page.locator('a[href="/test_cases"]').click();
-    }
 }

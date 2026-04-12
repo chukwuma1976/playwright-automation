@@ -1,14 +1,12 @@
-import { test, expect } from '@playwright/test';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { LoginPage } from '../../main/pages/LoginPage';
+import { test } from '@playwright/test';
+import { HomePage } from '../../main/pages/HomePage';
 import { ContactUsPage } from '../../main/pages/ContactUsPage';
 
 test.describe('Contact Us UI Tests', () => {
 
     test('Submit contact us form', async ({ page }) => {
-        const loginPage = new LoginPage();
-        await loginPage.clickContactUs(page);
+        const homePage = new HomePage();
+        await homePage.clickContactUs(page);
 
         const contactUsPage = new ContactUsPage();
         await contactUsPage.getInTouchHeaderIsVisible(page);
