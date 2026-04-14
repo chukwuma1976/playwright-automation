@@ -101,7 +101,7 @@ test.describe('Automation Exercise API Tests', () => {
         expect(responseCode.responseCode).toEqual(400);
     });
 
-    test('login with valid credentials', async ({ request }) => {
+    test('API login with valid credentials', async ({ request }) => {
 
         const response = await request.post(`${baseURL}/verifyLogin`, { form: credentials });
         const responseJson = await response.json();
@@ -113,7 +113,7 @@ test.describe('Automation Exercise API Tests', () => {
         expect(responseJson.message).toBe('User exists!');
     });
 
-    test('login with invalid credentials', async ({ request }) => {
+    test('APT login with invalid credentials', async ({ request }) => {
 
         const response = await request.post(`${baseURL}/verifyLogin`, { form: invalidCredentials });
         const responseJson = await response.json();

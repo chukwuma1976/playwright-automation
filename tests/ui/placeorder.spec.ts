@@ -8,8 +8,8 @@ import { generateUserToRegister } from '../../main/utilities/UserCredentialsGene
 import { RegistrationPage } from '../../main/pages/RegistrationPage';
 import { LandingPage } from '../../main/pages/LandingPage';
 import { CheckOutPage } from '../../main/pages/CheckOutPage';
-import { User } from '../../main/interfaces/user';
 import { PaymentPage } from '../../main/pages/PaymentPage';
+import { ProductSearchResultPage } from '../../main/pages/ProductSearchResultPage';
 
 test.describe('Placing Orders UI tests', () => {
     let homePage: HomePage;
@@ -21,6 +21,7 @@ test.describe('Placing Orders UI tests', () => {
     let landingPage: LandingPage;
     let checkOutPage: CheckOutPage;
     let paymentPage: PaymentPage;
+    let productSearchResultPage: ProductSearchResultPage;
 
     test.beforeEach(() => {
         homePage = new HomePage();
@@ -32,6 +33,7 @@ test.describe('Placing Orders UI tests', () => {
         landingPage = new LandingPage();
         checkOutPage = new CheckOutPage();
         paymentPage = new PaymentPage();
+        productSearchResultPage = new ProductSearchResultPage();
     })
 
     test('Place Order: Register while Checkout', async ({ page }) => {
@@ -106,4 +108,36 @@ test.describe('Placing Orders UI tests', () => {
         await registrationPage.clickContinueButton(page);
     })
 
+    test('Search Products and Verify Cart After Login', async ({ page }) => {
+        // const userCredentials = generateUser("sdet@automation.com", "sdetpassword31456");
+        const email = "sdet@automation.com";
+        const password = "sdetpassword31456";
+
+        await homePage.clickProducts(page);
+
+        await productsPage.searchForProduct(page, 'Tshirt');
+        await productSearchResultPage.confirmThatSearchedProductsHeaderIsVisible(page);
+        await productSearchResultPage.confirmThatProductsListIsVisible(page);
+
+        await productsPage.addProductToCart(page, 0);
+        await popup.continueShopping(page);
+        await productsPage.addProductToCart(page, 1);
+        await popup.viewCart(page);
+
+        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
+
+        await loginPage.login(page, email, password);
+        await landingPage.clickCart(page);
+
+        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
+        await cartPage.proceedToCheckout(page);
+
+        await checkOutPage.enterDescription(page, "Making a purchase");
+        await checkOutPage.submitOrder(page);
+
+        await paymentPage.makePayment(page, 'Test User', '1234 5678 9101 1123', '123', '12', '2030');
+        await paymentPage.confirmSuccessfulPaymentMessage(page);
+        await paymentPage.downloadInvoice(page);
+
+    })
 })

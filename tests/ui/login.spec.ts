@@ -10,14 +10,14 @@ test.describe('Login UI Tests', () => {
         loginPage = new LoginPage();
     });
 
-    test('Login with credentials', async ({ page }) => {
+    test('UI Login with credentials', async ({ page }) => {
         await loginPage.login(page, credentials.email, credentials.password);
 
         const landingPage = new LandingPage();
         await landingPage.userIsLoggedIn(page);
     });
 
-    test('Login with invalid credentials', async ({ page }) => {
+    test('UI Login with invalid credentials', async ({ page }) => {
         await loginPage.login(page, invalidCredentials.email, invalidCredentials.password);
         await loginPage.invalidCredentialsErrorIsVisible(page);
     });
