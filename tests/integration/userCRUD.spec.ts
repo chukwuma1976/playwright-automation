@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test'
 import { generateUserToRegister } from '../../main/utilities/UserCredentialsGenerator';
 import { userSchema } from '../../main/schemas/userSchema';
 import Ajv from 'ajv';
+import { apiURL } from '../../main/configuratons/config';
 
 test.describe('User CRUD integration test', () => {
-    const baseURL = 'https://automationexercise.com/api';
+    const baseURL = apiURL;
     const ajv = new Ajv();
 
     test('Register, access, edit, remove user', async ({ request }) => {
