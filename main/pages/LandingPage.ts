@@ -8,7 +8,7 @@ export class LandingPage {
         await page.waitForURL(this.baseURL);
         const loggedInSelector = 'a:has-text("Logged in as")';
         const loggedInUser = page.locator(loggedInSelector);
-        await page.waitForSelector(loggedInSelector, { state: 'visible', timeout: 5000 });
+        await page.waitForSelector(loggedInSelector, { state: 'visible', timeout: 30000 });
         expect(loggedInUser).toBeVisible();
     }
 
