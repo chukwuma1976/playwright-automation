@@ -23,7 +23,7 @@ test.describe('Testing iframes', () => {
     test('Test Playright and Selenium iframes', async ({ page }) => {
         const url = generateFullURL(practiceAutomation);
         await page.goto(url);
-        await page.waitForTimeout(2000); // Wait for 2 seconds to observe the actions in the iframe
+        await page.waitForTimeout(6000); // Wait for 2 seconds to observe the actions in the iframe
 
         await page.locator("a").filter({ hasText: "IFrames" }).click();
 
