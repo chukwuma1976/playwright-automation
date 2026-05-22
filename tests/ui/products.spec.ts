@@ -19,7 +19,7 @@ test.describe('Product UI Test Cases', () => {
         homePage = new HomePage();
         productsPage = new ProductsPage();
         popup = new CartPopupComponent();
-        cartPage = new CartPage();
+        cartPage = new CartPage(page);
         productDetailPage = new ProductDetailPage();
     });
 
@@ -65,9 +65,9 @@ test.describe('Product UI Test Cases', () => {
 
         await popup.viewCart(page);
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
-        await cartPage.confirmContentOfProduct(page, 0, "1", firstProductPrice, firstProductPrice);
-        await cartPage.confirmContentOfProduct(page, 1, "1", secondProductPrice, secondProductPrice);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
+        await cartPage.confirmContentOfProduct(0, "1", firstProductPrice, firstProductPrice);
+        await cartPage.confirmContentOfProduct(1, "1", secondProductPrice, secondProductPrice);
 
     });
 
@@ -81,7 +81,7 @@ test.describe('Product UI Test Cases', () => {
 
         await popup.viewCart(page);
 
-        await cartPage.confirmQuantityOfProductIs(page, 0, '4')
+        await cartPage.confirmQuantityOfProductIs(0, '4')
 
     });
 
@@ -98,9 +98,9 @@ test.describe('Product UI Test Cases', () => {
 
         await popup.viewCart(page);
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
-        await cartPage.deleteProduct(page, 0);
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 1);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
+        await cartPage.deleteProduct(0);
+        await cartPage.confirmNumberOfProductsInCartToBe(1);
     });
 
     test('Select product categories', async ({ page }) => {
@@ -146,6 +146,6 @@ test.describe('Product UI Test Cases', () => {
 
         await popup.viewCart(page);
 
-        await cartPage.confirmPresenceOfProductInCart(page, item);
+        await cartPage.confirmPresenceOfProductInCart(item);
     })
 });
