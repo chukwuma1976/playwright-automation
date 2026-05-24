@@ -7,18 +7,18 @@ test.describe('Login UI Tests', () => {
     let loginPage: LoginPage;
 
     test.beforeEach(async ({ page }) => {
-        loginPage = new LoginPage();
+        loginPage = new LoginPage(page);
     });
 
     test('UI Login with credentials', async ({ page }) => {
-        await loginPage.login(page, credentials.email, credentials.password);
+        await loginPage.login(credentials.email, credentials.password);
 
-        const landingPage = new LandingPage();
-        await landingPage.userIsLoggedIn(page);
+        const landingPage = new LandingPage(page);
+        await landingPage.userIsLoggedIn();
     });
 
     test('UI Login with invalid credentials', async ({ page }) => {
-        await loginPage.login(page, invalidCredentials.email, invalidCredentials.password);
-        await loginPage.invalidCredentialsErrorIsVisible(page);
+        await loginPage.login(invalidCredentials.email, invalidCredentials.password);
+        await loginPage.invalidCredentialsErrorIsVisible();
     });
 });

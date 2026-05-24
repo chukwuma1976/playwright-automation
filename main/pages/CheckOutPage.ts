@@ -1,9 +1,18 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 
 export class CheckOutPage {
+    addressInfo: Locator;
+    description: Locator;
+    placeOrderButton: Locator;
 
-    async confirmAddress(page: Page, user: any) {
-        const addressInfo = await page.locator('ul#address_delivery').textContent();
+    constructor(page: Page) {
+        this.addressInfo = page.locator('ul#address_delivery');
+        this.description = page.locator('textarea[name="message"]');
+        this.placeOrderButton = page.getByRole('link', { name: 'Place Order' });
+    }
+
+    async confirmAddress(user: any) {
+        const addressInfo = await this.addressInfo.textContent();
         expect(addressInfo).toContain(user.firstname);
         expect(addressInfo).toContain(user.lastname);
         expect(addressInfo).toContain(user.address1);
@@ -13,11 +22,11 @@ export class CheckOutPage {
         expect(addressInfo).toContain(user.zipcode);
     }
 
-    async enterDescription(page: Page, description: string) {
-        await page.locator('textarea[name="message"]').fill(description);
+    async enterDescription(description: string) {
+        await this.description.fill(description);
     }
 
-    async submitOrder(page: Page) {
-        await page.getByRole('link', { name: 'Place Order' }).click();
+    async submitOrder() {
+        await this.placeOrderButton.click();
     }
 }

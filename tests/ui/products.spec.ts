@@ -16,52 +16,52 @@ test.describe('Product UI Test Cases', () => {
 
 
     test.beforeEach(async ({ page }) => {
-        homePage = new HomePage();
-        productsPage = new ProductsPage();
+        homePage = new HomePage(page);
+        productsPage = new ProductsPage(page);
         popup = new CartPopupComponent();
         cartPage = new CartPage(page);
-        productDetailPage = new ProductDetailPage();
+        productDetailPage = new ProductDetailPage(page);
     });
 
     test('Verify that products are displayed and select first product', async ({ page }) => {
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
         expect(page.url()).toContain('/products');
 
-        await productsPage.confirmThatProductsListIsVisible(page);
+        await productsPage.confirmThatProductsListIsVisible();
 
-        await productsPage.clickFirstProductViewButton(page);
+        await productsPage.clickFirstProductViewButton();
         expect(page.url()).toContain('/product_details');
 
-        await productDetailPage.confirmThatProductDetailsAreVisible(page);
+        await productDetailPage.confirmThatProductDetailsAreVisible();
 
     });
 
     test('Verify that search functionality works', async ({ page }) => {
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
         expect(page.url()).toBe('https://automationexercise.com/products');
 
-        await productsPage.searchForProduct(page, 'Dress');
+        await productsPage.searchForProduct('Dress');
 
-        const productSearchResultPage = new ProductSearchResultPage();
-        await productSearchResultPage.confirmThatSearchedProductsHeaderIsVisible(page);
-        await productSearchResultPage.confirmThatProductsListIsVisible(page);
+        const productSearchResultPage = new ProductSearchResultPage(page);
+        await productSearchResultPage.confirmThatSearchedProductsHeaderIsVisible();
+        await productSearchResultPage.confirmThatProductsListIsVisible();
 
     });
 
 
     test('Add products', async ({ page }) => {
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        const firstProductPrice = await productsPage.getProductPrice(page, 0);
-        await productsPage.addProductToCart(page, 0);
+        const firstProductPrice = await productsPage.getProductPrice(0);
+        await productsPage.addProductToCart(0);
 
         await popup.continueShopping(page);
 
-        const secondProductPrice = await productsPage.getProductPrice(page, 1);
-        await productsPage.addProductToCart(page, 1)
+        const secondProductPrice = await productsPage.getProductPrice(1);
+        await productsPage.addProductToCart(1)
 
         await popup.viewCart(page);
 
@@ -72,12 +72,12 @@ test.describe('Product UI Test Cases', () => {
     });
 
     test('Increase number of product and add to cart', async ({ page }) => {
-        await homePage.clickProducts(page);
-        await productsPage.clickFirstProductViewButton(page);
+        await homePage.clickProducts();
+        await productsPage.clickFirstProductViewButton();
 
-        await productDetailPage.confirmThatProductDetailsAreVisible(page);
-        await productDetailPage.changeProductQuantity(page, '4');
-        await productDetailPage.addProductToCart(page);
+        await productDetailPage.confirmThatProductDetailsAreVisible();
+        await productDetailPage.changeProductQuantity('4');
+        await productDetailPage.addProductToCart();
 
         await popup.viewCart(page);
 
@@ -86,15 +86,15 @@ test.describe('Product UI Test Cases', () => {
     });
 
     test('Add and then delete a product', async ({ page }) => {
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        const firstProductPrice = await productsPage.getProductPrice(page, 0);
-        await productsPage.addProductToCart(page, 0);
+        const firstProductPrice = await productsPage.getProductPrice(0);
+        await productsPage.addProductToCart(0);
 
         await popup.continueShopping(page);
 
-        const secondProductPrice = await productsPage.getProductPrice(page, 1);
-        await productsPage.addProductToCart(page, 1)
+        const secondProductPrice = await productsPage.getProductPrice(1);
+        await productsPage.addProductToCart(1)
 
         await popup.viewCart(page);
 
@@ -107,42 +107,42 @@ test.describe('Product UI Test Cases', () => {
         const womensCategory = "Women - Dress Products";
         const menCategory = "Men - Tshirts Products";
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.selectWomensCategoryThenDress(page);
-        await productsPage.checkCategoryTitle(page, womensCategory);
-        await productsPage.selectMensCategoryThenTshirt(page);
-        await productsPage.checkCategoryTitle(page, menCategory);
+        await productsPage.selectWomensCategoryThenDress();
+        await productsPage.checkCategoryTitle(womensCategory);
+        await productsPage.selectMensCategoryThenTshirt();
+        await productsPage.checkCategoryTitle(menCategory);
     });
 
     test('Select brands', async ({ page }) => {
         const brand1 = "Polo";
         const brand2 = "H&M";
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.selectBrand(page, brand1);
-        await productsPage.checkCategoryTitle(page, brand1);
+        await productsPage.selectBrand(brand1);
+        await productsPage.checkCategoryTitle(brand1);
 
-        await productsPage.selectBrand(page, brand2);
-        await productsPage.checkCategoryTitle(page, brand2);
+        await productsPage.selectBrand(brand2);
+        await productsPage.checkCategoryTitle(brand2);
     })
 
     test('Select a product and write a review', async ({ page }) => {
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.clickFirstProductViewButton(page);
+        await productsPage.clickFirstProductViewButton();
 
-        await productDetailPage.confirmWriteYourReviewIsPresent(page);
-        await productDetailPage.writeReview(page, "some tester", "sometester@email.com", "The produce is GREAT!");
-        await productDetailPage.confirmReviewReceivedMessage(page);
+        await productDetailPage.confirmWriteYourReviewIsPresent();
+        await productDetailPage.writeReview("some tester", "sometester@email.com", "The produce is GREAT!");
+        await productDetailPage.confirmReviewReceivedMessage();
     })
 
     test('Select a recommended item from landing page', async ({ page }) => {
         const item = "Stylish Dress";
 
-        await homePage.hasRecommendedItemsHeader(page);
-        await homePage.selectRecommendedItem(page, item);
+        await homePage.hasRecommendedItemsHeader();
+        await homePage.selectRecommendedItem(item);
 
         await popup.viewCart(page);
 

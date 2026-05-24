@@ -9,13 +9,22 @@ test.describe('Testing slider element', () => {
         await page.goto(url);
 
         const sliderElement = page.locator("#slideMe");
+        const sliderValue = page.locator("#value");
         await sliderElement.focus();
-        for (let i = 0; i < 40; i++) {
+        while (await sliderValue.textContent() !== "100") {
             await sliderElement.press("ArrowRight");
-            await page.waitForTimeout(100); // Wait for 0.5 seconds to observe the slider movement
         }
         await page.waitForTimeout(2000);
 
     })
+
+    test('Test get anchor tags functionality', async ({ page }) => {
+        const url = generateFullURL(practiceAutomation);
+        await page.goto(url);
+
+        const anchorTags = page.locator("a");
+        console.log(await anchorTags.evaluateAll(links => links.map(link => link.textContent)));
+
+    });
 
 });

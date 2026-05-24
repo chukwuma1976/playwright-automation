@@ -4,33 +4,33 @@ import { LoginPage } from '../../main/pages/LoginPage';
 import { LandingPage } from '../../main/pages/LandingPage';
 import { RegistrationPage } from '../../main/pages/RegistrationPage';
 
-test.describe('Register User UI Tests', () => {
+test.describe.parallel('Register User UI Tests', () => {
     let loginPage: LoginPage;
     let registrationPage: RegistrationPage;
 
     test.beforeEach(async ({ page }) => {
-        loginPage = new LoginPage();
-        registrationPage = new RegistrationPage();
+        loginPage = new LoginPage(page);
+        registrationPage = new RegistrationPage(page);
     });
 
     test('Register new user', async ({ page }) => {
         const userCredentials = generateUserToRegister();
-        await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
+        await loginPage.registerUser(userCredentials.name, userCredentials.email);
 
-        await registrationPage.checkEnterAccountInformationHeaderIsVisible(page);
-        await registrationPage.fillRegistrationForm(page, userCredentials);
-        await registrationPage.checkAccountCreatedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        await registrationPage.checkEnterAccountInformationHeaderIsVisible();
+        await registrationPage.fillRegistrationForm(userCredentials);
+        await registrationPage.checkAccountCreatedHeaderIsVisible();
+        await registrationPage.clickContinueButton();
 
-        const landingPage = new LandingPage();
-        await landingPage.userIsLoggedIn(page);
-        await landingPage.clickDeleteAccountButton(page);
+        const landingPage = new LandingPage(page);
+        await landingPage.userIsLoggedIn();
+        await landingPage.clickDeleteAccountButton();
     });
 
     test('Register user with existing email', async ({ page }) => {
         const userCredentials = generateUserWithExistingEmail();
-        await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
-        await loginPage.emailAddressExistsErrorIsVisble(page);
+        await loginPage.registerUser(userCredentials.name, userCredentials.email);
+        await loginPage.emailAddressExistsErrorIsVisble();
     });
 
 

@@ -6,12 +6,12 @@ import { LandingPage } from '../../main/pages/LandingPage';
 test.describe('Logout UI Tests', () => {
 
     test('Logout after logging in with credentials', async ({ page }) => {
-        const loginPage = new LoginPage();
-        await loginPage.login(page, credentials.email, credentials.password);
+        const loginPage = new LoginPage(page);
+        await loginPage.login(credentials.email, credentials.password);
 
-        const landingPage = new LandingPage();
-        await landingPage.logOut(page);
+        const landingPage = new LandingPage(page);
+        await landingPage.logOut();
 
-        await loginPage.hasNavigatedToLoginPage(page);
+        await loginPage.hasNavigatedToLoginPage();
     });
 });

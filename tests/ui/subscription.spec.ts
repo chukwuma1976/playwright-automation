@@ -5,26 +5,26 @@ import { CartPage } from '../../main/pages/CartPage';
 test.describe('Subscription UI tests', () => {
     let homePage: HomePage;
 
-    test.beforeEach(() => {
-        homePage = new HomePage();
+    test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
     })
 
     test('Subscribe in home page', async ({ page }) => {
 
-        await homePage.confirmSubscriptionHeader(page);
-        await homePage.subscribe(page, "tester@email.com");
-        await homePage.confirmSuccessfulSubscription(page);
+        await homePage.confirmSubscriptionHeader();
+        await homePage.subscribe("tester@email.com");
+        await homePage.confirmSuccessfulSubscription();
 
     })
 
     test('Subscribe in cart page', async ({ page }) => {
 
-        await homePage.clickCart(page);
+        await homePage.clickCart();
 
-        const cartPage = new CartPage();
-        await cartPage.confirmSubscriptionHeader(page);
-        await cartPage.subscribe(page, "anothertest@email.com");
-        await cartPage.confirmSuccessfulSubscription(page);
+        const cartPage = new CartPage(page);
+        await cartPage.confirmSubscriptionHeader();
+        await cartPage.subscribe("anothertest@email.com");
+        await cartPage.confirmSuccessfulSubscription();
 
     })
 

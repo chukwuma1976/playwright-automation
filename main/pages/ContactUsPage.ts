@@ -1,31 +1,46 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 export class ContactUsPage {
 
-    async getInTouchHeaderIsVisible(page: Page) {
-        const getInTouchHeader = page.locator('h2:has-text("Get In Touch")');
-        await getInTouchHeader.isVisible();
-        expect(getInTouchHeader).toBeVisible();
+    page: Page;
+    getInTouchHeader: Locator;
+    nameInput: Locator;
+    emailInput: Locator
+    subjectInput: Locator;
+    messageInput: Locator;
+
+    constructor(page: Page) {
+        this.page = page;
+        this.getInTouchHeader = page.locator('h2:has-text("Get In Touch")');
+        this.nameInput = page.locator('input[data-qa="name"]');
+        this.emailInput = page.locator('input[data-qa="email"]');
+        this.subjectInput = page.locator('input[data-qa="subject"]');
+        this.messageInput = page.locator('textarea#message');
     }
 
-    async fillContactUsForm(page: Page, name: string, email: string, subject: string, message: string) {
+    async getInTouchHeaderIsVisible() {
+        await this.getInTouchHeader.isVisible();
+        expect(this.getInTouchHeader).toBeVisible();
+    }
 
-        await page.locator('input[data-qa="name"]').fill(name);
-        await page.locator('input[data-qa="email"]').fill(email);
-        await page.locator('input[data-qa="subject"]').fill(subject);
-        await page.locator('textarea#message').fill(message);
+    async fillContactUsForm(name: string, email: string, subject: string, message: string) {
+
+        await this.nameInput.fill(name);
+        await this.emailInput.fill(email);
+        await this.subjectInput.fill(subject);
+        await this.messageInput.fill(message);
 
         //file upload
         const __dirname = path.dirname(fileURLToPath(import.meta.url));
-        await page.locator('input[type="file"]').setInputFiles(path.join(__dirname, '../../main/resources/testUpload.txt'));
+        await this.page.locator('input[type="file"]').setInputFiles(path.join(__dirname, '../../main/resources/testUpload.txt'));
 
-        await page.locator('input[data-qa="submit-button"]').click();
+        await this.page.locator('input[data-qa="submit-button"]').click();
 
-        page.on('dialog', async dialog => {
+        this.page.on('dialog', async dialog => {
             await dialog.accept();
-            await page.getByRole('button', { name: 'OK' }).click();
+            await this.page.getByRole('button', { name: 'OK' }).click();
         });
     }
 

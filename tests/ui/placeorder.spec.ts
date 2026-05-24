@@ -23,89 +23,89 @@ test.describe('Placing Orders UI tests', () => {
     let paymentPage: PaymentPage;
     let productSearchResultPage: ProductSearchResultPage;
 
-    test.beforeEach(() => {
-        homePage = new HomePage();
-        productsPage = new ProductsPage();
+    test.beforeEach(({ page }) => {
+        homePage = new HomePage(page);
+        productsPage = new ProductsPage(page);
         popup = new CartPopupComponent();
-        cartPage = new CartPage();
-        loginPage = new LoginPage();
-        registrationPage = new RegistrationPage();
-        landingPage = new LandingPage();
-        checkOutPage = new CheckOutPage();
-        paymentPage = new PaymentPage();
-        productSearchResultPage = new ProductSearchResultPage();
+        cartPage = new CartPage(page);
+        loginPage = new LoginPage(page);
+        registrationPage = new RegistrationPage(page);
+        landingPage = new LandingPage(page);
+        checkOutPage = new CheckOutPage(page);
+        paymentPage = new PaymentPage(page);
+        productSearchResultPage = new ProductSearchResultPage(page);
     })
 
     test('Place Order: Register while Checkout', async ({ page }) => {
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.addProductToCart(page, 0);
+        await productsPage.addProductToCart(0);
         await popup.continueShopping(page);
-        await productsPage.addProductToCart(page, 1);
+        await productsPage.addProductToCart(1);
         await popup.viewCart(page);
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
-        await cartPage.proceedToCheckout(page);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
+        await cartPage.proceedToCheckout();
         await popup.login(page);
 
         const userCredentials = generateUserToRegister();
-        await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
+        await loginPage.registerUser(userCredentials.name, userCredentials.email);
 
-        await registrationPage.checkEnterAccountInformationHeaderIsVisible(page);
-        await registrationPage.fillRegistrationForm(page, userCredentials);
-        await registrationPage.checkAccountCreatedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        await registrationPage.checkEnterAccountInformationHeaderIsVisible();
+        await registrationPage.fillRegistrationForm(userCredentials);
+        await registrationPage.checkAccountCreatedHeaderIsVisible();
+        await registrationPage.clickContinueButton();
 
-        await landingPage.userIsLoggedIn(page);
-        await landingPage.clickCart(page);
+        await landingPage.userIsLoggedIn();
+        await landingPage.clickCart();
 
-        await cartPage.proceedToCheckout(page);
+        await cartPage.proceedToCheckout();
 
-        await checkOutPage.confirmAddress(page, userCredentials)
-        await checkOutPage.enterDescription(page, "Making a purchase");
-        await checkOutPage.submitOrder(page);
+        await checkOutPage.confirmAddress(userCredentials)
+        await checkOutPage.enterDescription("Making a purchase");
+        await checkOutPage.submitOrder();
 
-        await paymentPage.makePayment(page, 'Test User', '1234 5678 9101 1123', '123', '12', '2030');
-        await paymentPage.confirmSuccessfulPaymentMessage(page);
+        await paymentPage.makePayment('Test User', '1234 5678 9101 1123', '123', '12', '2030');
+        await paymentPage.confirmSuccessfulPaymentMessage();
 
-        await landingPage.clickDeleteAccountButton(page);
-        await registrationPage.checkAccountDeletedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        await landingPage.clickDeleteAccountButton();
+        await registrationPage.checkAccountDeletedHeaderIsVisible();
+        await registrationPage.clickContinueButton();
     })
 
     test('Place Order: Register before Checkout', async ({ page }) => {
         const userCredentials = generateUserToRegister();
-        await loginPage.registerUser(page, userCredentials.name, userCredentials.email);
+        await loginPage.registerUser(userCredentials.name, userCredentials.email);
 
-        await registrationPage.checkEnterAccountInformationHeaderIsVisible(page);
-        await registrationPage.fillRegistrationForm(page, userCredentials);
-        await registrationPage.checkAccountCreatedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        await registrationPage.checkEnterAccountInformationHeaderIsVisible();
+        await registrationPage.fillRegistrationForm(userCredentials);
+        await registrationPage.checkAccountCreatedHeaderIsVisible();
+        await registrationPage.clickContinueButton();
 
-        await landingPage.userIsLoggedIn(page);
+        await landingPage.userIsLoggedIn();
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.addProductToCart(page, 0);
+        await productsPage.addProductToCart(0);
         await popup.continueShopping(page);
-        await productsPage.addProductToCart(page, 1);
+        await productsPage.addProductToCart(1);
         await popup.viewCart(page);
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
-        await cartPage.proceedToCheckout(page);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
+        await cartPage.proceedToCheckout();
 
-        await checkOutPage.confirmAddress(page, userCredentials)
-        await checkOutPage.enterDescription(page, "Making a purchase");
-        await checkOutPage.submitOrder(page);
+        await checkOutPage.confirmAddress(userCredentials)
+        await checkOutPage.enterDescription("Making a purchase");
+        await checkOutPage.submitOrder();
 
-        await paymentPage.makePayment(page, 'Test User', '1234 5678 9101 1123', '123', '12', '2030');
-        await paymentPage.confirmSuccessfulPaymentMessage(page);
-        await paymentPage.downloadInvoice(page);
+        await paymentPage.makePayment('Test User', '1234 5678 9101 1123', '123', '12', '2030');
+        await paymentPage.confirmSuccessfulPaymentMessage();
+        await paymentPage.downloadInvoice();
 
-        await landingPage.clickDeleteAccountButton(page);
-        await registrationPage.checkAccountDeletedHeaderIsVisible(page);
-        await registrationPage.clickContinueButton(page);
+        await landingPage.clickDeleteAccountButton();
+        await registrationPage.checkAccountDeletedHeaderIsVisible();
+        await registrationPage.clickContinueButton();
     })
 
     test('Search Products and Verify Cart After Login', async ({ page }) => {
@@ -113,31 +113,31 @@ test.describe('Placing Orders UI tests', () => {
         const email = "sdet@automation.com";
         const password = "sdetpassword31456";
 
-        await homePage.clickProducts(page);
+        await homePage.clickProducts();
 
-        await productsPage.searchForProduct(page, 'Tshirt');
-        await productSearchResultPage.confirmThatSearchedProductsHeaderIsVisible(page);
-        await productSearchResultPage.confirmThatProductsListIsVisible(page);
+        await productsPage.searchForProduct('Tshirt');
+        await productSearchResultPage.confirmThatSearchedProductsHeaderIsVisible();
+        await productSearchResultPage.confirmThatProductsListIsVisible();
 
-        await productsPage.addProductToCart(page, 0);
+        await productsPage.addProductToCart(0);
         await popup.continueShopping(page);
-        await productsPage.addProductToCart(page, 1);
+        await productsPage.addProductToCart(1);
         await popup.viewCart(page);
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
 
-        await loginPage.login(page, email, password);
-        await landingPage.clickCart(page);
+        await loginPage.login(email, password);
+        await landingPage.clickCart();
 
-        await cartPage.confirmNumberOfProductsInCartToBe(page, 2);
-        await cartPage.proceedToCheckout(page);
+        await cartPage.confirmNumberOfProductsInCartToBe(2);
+        await cartPage.proceedToCheckout();
 
-        await checkOutPage.enterDescription(page, "Making a purchase");
-        await checkOutPage.submitOrder(page);
+        await checkOutPage.enterDescription("Making a purchase");
+        await checkOutPage.submitOrder();
 
-        await paymentPage.makePayment(page, 'Test User', '1234 5678 9101 1123', '123', '12', '2030');
-        await paymentPage.confirmSuccessfulPaymentMessage(page);
-        await paymentPage.downloadInvoice(page);
+        await paymentPage.makePayment('Test User', '1234 5678 9101 1123', '123', '12', '2030');
+        await paymentPage.confirmSuccessfulPaymentMessage();
+        await paymentPage.downloadInvoice();
 
     })
 })

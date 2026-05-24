@@ -2,55 +2,56 @@ import { expect, Locator, Page } from '@playwright/test';
 
 export class ProductsPage {
     baseURL: string = 'https://automationexercise.com/products';
-    productsListSelector: string;
-
-    constructor() {
-        this.productsListSelector = 'div.features_items';
+    productsList: Locator;
+    products: Locator;
+    page: Page;
+    constructor(page: Page) {
+        this.page = page;
+        this.productsList = page.locator('div.features_items');
+        this.products = page.locator('div.single-products');
     }
 
-    async confirmThatProductsListIsVisible(page: Page) {
-        const productsList = page.locator(this.productsListSelector);
-        await productsList.isVisible();
+    async confirmThatProductsListIsVisible() {
+        await expect(this.productsList).toBeVisible();
     }
 
-    async clickFirstProductViewButton(page: Page) {
-        const productsList = page.locator(this.productsListSelector);
-        const firstProductViewButton = productsList.locator('div.choose').first();
+    async clickFirstProductViewButton() {
+        const firstProductViewButton = this.productsList.locator('div.choose').first();
         await firstProductViewButton.click();
     }
 
-    async searchForProduct(page: Page, productName: string) {
-        await page.locator("input#search_product").fill(productName);
-        await page.locator("button#submit_search").click();
+    async searchForProduct(productName: string) {
+        await this.page.locator("input#search_product").fill(productName);
+        await this.page.locator("button#submit_search").click();
     }
 
-    async getProductPrice(page: Page, index: number) {
-        const product = page.locator('div.single-products').nth(index);
+    async getProductPrice(index: number) {
+        const product = this.products.nth(index);
         return await product.locator('h2').first().textContent();
     }
 
-    async addProductToCart(page: Page, index: number) {
-        const product = page.locator('div.single-products').nth(index);
+    async addProductToCart(index: number) {
+        const product = this.products.nth(index);
         const addproductButton = product.locator('a.add-to-cart').first();
         await addproductButton.click();
     }
 
-    async selectWomensCategoryThenDress(page: Page) {
-        await page.locator('a[href="#Women"]').click();
-        await page.getByRole('link', { name: 'Dress' }).click();
+    async selectWomensCategoryThenDress() {
+        await this.page.locator('a[href="#Women"]').click();
+        await this.page.getByRole('link', { name: 'Dress' }).click();
     }
 
-    async selectMensCategoryThenTshirt(page: Page) {
-        await page.locator('a[href="#Men"]').click();
-        await page.getByRole('link', { name: 'Tshirts' }).click();
+    async selectMensCategoryThenTshirt() {
+        await this.page.locator('a[href="#Men"]').click();
+        await this.page.getByRole('link', { name: 'Tshirts' }).click();
     }
 
-    async checkCategoryTitle(page: Page, content: string) {
-        const categoryTitle = page.locator('h2.title.text-center');
+    async checkCategoryTitle(content: string) {
+        const categoryTitle = this.page.locator('h2.title.text-center');
         expect(await categoryTitle.textContent()).toContain(content);
     }
 
-    async selectBrand(page: Page, brand: string) {
-        await page.getByRole('link', { name: brand }).click();
+    async selectBrand(brand: string) {
+        await this.page.getByRole('link', { name: brand }).click();
     }
 }
