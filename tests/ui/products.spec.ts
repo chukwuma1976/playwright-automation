@@ -5,7 +5,6 @@ import { ProductDetailPage } from '../../main/pages/ProductDetailPage';
 import { ProductSearchResultPage } from '../../main/pages/ProductSearchResultPage';
 import { CartPage } from '../../main/pages/CartPage';
 import { CartPopupComponent } from '../../main/component/CartPopupComponent';
-import { LandingPage } from '../../main/pages/LandingPage';
 
 test.describe('Product UI Test Cases', () => {
     let homePage: HomePage;
@@ -18,7 +17,7 @@ test.describe('Product UI Test Cases', () => {
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
         productsPage = new ProductsPage(page);
-        popup = new CartPopupComponent();
+        popup = new CartPopupComponent(page);
         cartPage = new CartPage(page);
         productDetailPage = new ProductDetailPage(page);
     });
@@ -58,12 +57,12 @@ test.describe('Product UI Test Cases', () => {
         const firstProductPrice = await productsPage.getProductPrice(0);
         await productsPage.addProductToCart(0);
 
-        await popup.continueShopping(page);
+        await popup.continueShopping();
 
         const secondProductPrice = await productsPage.getProductPrice(1);
         await productsPage.addProductToCart(1)
 
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmNumberOfProductsInCartToBe(2);
         await cartPage.confirmContentOfProduct(0, "1", firstProductPrice, firstProductPrice);
@@ -79,7 +78,7 @@ test.describe('Product UI Test Cases', () => {
         await productDetailPage.changeProductQuantity('4');
         await productDetailPage.addProductToCart();
 
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmQuantityOfProductIs(0, '4')
 
@@ -91,12 +90,12 @@ test.describe('Product UI Test Cases', () => {
         const firstProductPrice = await productsPage.getProductPrice(0);
         await productsPage.addProductToCart(0);
 
-        await popup.continueShopping(page);
+        await popup.continueShopping();
 
         const secondProductPrice = await productsPage.getProductPrice(1);
         await productsPage.addProductToCart(1)
 
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmNumberOfProductsInCartToBe(2);
         await cartPage.deleteProduct(0);
@@ -144,7 +143,7 @@ test.describe('Product UI Test Cases', () => {
         await homePage.hasRecommendedItemsHeader();
         await homePage.selectRecommendedItem(item);
 
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmPresenceOfProductInCart(item);
     })

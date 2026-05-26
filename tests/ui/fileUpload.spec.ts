@@ -1,11 +1,12 @@
 import test from "@playwright/test";
-import { generateFullURL, practiceAutomation } from "../../main/configuratons/config";
+import { FileUploadPage } from "../../main/pages/FileUploadPage";
 
 test.describe(() => {
 
     test('Test file upload functionality', async ({ page }) => {
-        await page.goto(generateFullURL(practiceAutomation, "/file-upload/"));
-        await page.setInputFiles("input[type='file']", "main/resources/testUpload.txt");
+        const fileUploadPage = new FileUploadPage(page);
+        await fileUploadPage.navigateToFileUploadPage();
+        await fileUploadPage.fileUpload();
     })
 
 });

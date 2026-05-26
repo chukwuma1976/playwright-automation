@@ -26,7 +26,7 @@ test.describe('Placing Orders UI tests', () => {
     test.beforeEach(({ page }) => {
         homePage = new HomePage(page);
         productsPage = new ProductsPage(page);
-        popup = new CartPopupComponent();
+        popup = new CartPopupComponent(page);
         cartPage = new CartPage(page);
         loginPage = new LoginPage(page);
         registrationPage = new RegistrationPage(page);
@@ -41,13 +41,13 @@ test.describe('Placing Orders UI tests', () => {
         await homePage.clickProducts();
 
         await productsPage.addProductToCart(0);
-        await popup.continueShopping(page);
+        await popup.continueShopping();
         await productsPage.addProductToCart(1);
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmNumberOfProductsInCartToBe(2);
         await cartPage.proceedToCheckout();
-        await popup.login(page);
+        await popup.login();
 
         const userCredentials = generateUserToRegister();
         await loginPage.registerUser(userCredentials.name, userCredentials.email);
@@ -88,9 +88,9 @@ test.describe('Placing Orders UI tests', () => {
         await homePage.clickProducts();
 
         await productsPage.addProductToCart(0);
-        await popup.continueShopping(page);
+        await popup.continueShopping();
         await productsPage.addProductToCart(1);
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmNumberOfProductsInCartToBe(2);
         await cartPage.proceedToCheckout();
@@ -120,9 +120,9 @@ test.describe('Placing Orders UI tests', () => {
         await productSearchResultPage.confirmThatProductsListIsVisible();
 
         await productsPage.addProductToCart(0);
-        await popup.continueShopping(page);
+        await popup.continueShopping();
         await productsPage.addProductToCart(1);
-        await popup.viewCart(page);
+        await popup.viewCart();
 
         await cartPage.confirmNumberOfProductsInCartToBe(2);
 

@@ -1,26 +1,19 @@
 import { test } from '@playwright/test';
-import { generateFullURL, practiceAutomation } from '../../main/configuratons/config';
+import { FileDownloadPage } from '../../main/pages/FileDownloadPage';
 
 test.describe('File Download', () => {
+    let fileDownLoadPage: FileDownloadPage;
+
     test.beforeEach(async ({ page }) => {
-        await page.goto(generateFullURL(practiceAutomation, "/file-download"));
+        fileDownLoadPage = new FileDownloadPage(page);
+        await fileDownLoadPage.navigateToFileDownloadPage();
     });
 
     test('Test normal file download', async ({ page }) => {
-
-        const normalDownloadButton = page.locator("a").filter({ hasText: "Download" }).first();
-        await normalDownloadButton.click();
-
+        await fileDownLoadPage.fileDownLoad();
     });
 
     test('Test file download with password', async ({ page }) => {
-
-        const downloadButtonWithPassword = page.locator("a[href='#unlock']");
-        await downloadButtonWithPassword.click();
-
-        const frame = page.frameLocator("#wpdm-lock-frame");
-        await frame.locator("input[type='password']").fill("automateNow");
-        await frame.locator("input[type='submit']").click();
-
+        await fileDownLoadPage.fileDownLoadWithPassword();
     });
 });
