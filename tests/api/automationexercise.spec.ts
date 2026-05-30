@@ -20,8 +20,19 @@ test.describe('Automation Exercise API Tests', () => {
 
     test('GET/products', async ({ request }) => {
 
+        const start = Date.now();
+        const startPrime = performance.now();
+
         const response = await request.get(`${baseURL}/productsList`);
+
+        //check response times using both Date.now() and performance.now()
+        const responseTime = Date.now() - start;
+        const responseTimePrime = performance.now() - startPrime;
+
         const products = await response.json();
+
+        //note that using performance now adds more precision
+        console.log(`response time 1 = ${responseTime} and response time 2 = ${responseTimePrime}`);
 
         expect(response.ok()).toBeTruthy();
         expect(response.status()).toEqual(200);
