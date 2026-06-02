@@ -1,7 +1,7 @@
 export function generateUserCredentials() {
     const timestamp = Date.now();
-    const email = `testUser${timestamp}@email.com`;
-    const password = `testPassword${timestamp}`;
+    const email = `testuser${timestamp}@email.com`;
+    const password = `testpassword${timestamp}`;
     return { email, password };
 }
 

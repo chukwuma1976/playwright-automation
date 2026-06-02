@@ -1,0 +1,31 @@
+import { expect, Locator, Page } from "@playwright/test";
+import { generateFullURL, practiceTestingUi } from "../configuratons/config";
+
+export class PracticeLoginPage {
+    URL: string;
+    emailInput: Locator;
+    passwordInput: Locator;
+    loginButton: Locator;
+
+    constructor(private page: Page) {
+        this.page = page;
+        this.URL = generateFullURL(practiceTestingUi, "notes/app/login");
+        this.emailInput = page.getByLabel("Email");
+        this.passwordInput = page.getByLabel("Password");
+        this.loginButton = page.getByRole("button", { name: "Login" });
+    }
+
+    async navigateToLoginPage() {
+        await this.page.goto(this.URL);
+    }
+
+    async loginUser(email: string, password: string) {
+        await this.emailInput.fill(email);
+        await this.passwordInput.fill(password);
+        await this.loginButton.click();
+    }
+
+    async verifyUserOnLandingPage() {
+        expect(this.page.url()).toBe("https://practice.expandtesting.com/notes/app");
+    }
+}
