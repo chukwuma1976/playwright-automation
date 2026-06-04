@@ -44,3 +44,17 @@ export const testUser = {
     email: "automation@tester.com",
     password: "automationpassword"
 }
+
+export const testUser1 = {
+    name: "automation1Tester",
+    email: "automation1@tester.com",
+    password: "automation1password"
+}
+
+export const testUser2 = {
+    name: "automation2Tester",
+    email: "automation2@tester.com",
+    password: "automation2password"
+}
+
+export const testUsers = [testUser, testUser2, testUser2]

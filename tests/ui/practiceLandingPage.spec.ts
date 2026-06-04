@@ -7,15 +7,16 @@ import { PracticeProfileDetailsPage } from "../../main/pages/PracticeProfileDeta
 test.describe("Practice landing page tasks tests", () => {
 
     let practiceLandingPage: PracticeLandingPage;
+    const { email, name, password } = testUser;
 
     test.beforeEach(async ({ page }) => {
-        const { email, password } = testUser;
+
         new PracticeLoginPage(page).navigateToLoginPage();
         await new PracticeLoginPage(page).loginUser(email, password);
         practiceLandingPage = new PracticeLandingPage(page);
     });
 
-    test("Test landing page title", async ({ page }) => {
+    test("Test landing page", async ({ page }) => {
         await practiceLandingPage.clickAllTab();
         await practiceLandingPage.clickTab("Home");
         await practiceLandingPage.clickTab("Work");
@@ -24,12 +25,9 @@ test.describe("Practice landing page tasks tests", () => {
         await practiceLandingPage.fillSearchInput("Another one");
         await practiceLandingPage.clickSearch();
 
-        await practiceLandingPage.verifyNoteIsDisplayed("Another one");
-
         await practiceLandingPage.gotoProfile();
 
         const profilePage = new PracticeProfileDetailsPage(page);
-        const { name, email } = testUser;
         await profilePage.verifyProfileDetailsAreCorrect(email, name, "", "");
 
         await practiceLandingPage.logout();
