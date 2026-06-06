@@ -1,4 +1,4 @@
-import test, { expect } from "@playwright/test";
+import test, { APIRequestContext, expect } from "@playwright/test";
 import { generateFullURL, practiceTestingApi, practiceTestingUi } from "../../main/configuratons/config";
 import { testUser1 } from "../../main/utilities/UserCredentialsGenerator";
 import { generateTaskToAdd } from "../../main/utilities/testDataGenerator";
@@ -58,25 +58,25 @@ test.describe("User adding tasks", () => {
         await deleteAllTasks(request);
     })
 
-    async function loginAndRetrieveToken(request: any, credentials: { [key: string]: string }): Promise<string> {
+    async function loginAndRetrieveToken(request: APIRequestContext, credentials: { [key: string]: string }): Promise<string> {
         const response = await request.post(loginURL, { form: credentials });
         const result = await response.json();
         return result.data.token;
     }
 
-    async function deleteTaskWithAPI(request: any): Promise<void> {
+    async function deleteTaskWithAPI(request: APIRequestContext): Promise<void> {
         const deleteNotesUrl = generateFullURL(practiceTestingApi, `notes/${taskId}`);
         const response = await request.delete(deleteNotesUrl, { headers: { "x-auth-token": token } });
         expect(response.status()).toBe(200);
     }
 
-    async function editTaskWithAPI(request: any, payload: any): Promise<void> {
+    async function editTaskWithAPI(request: APIRequestContext, payload: any): Promise<void> {
         const editNotesUrl = generateFullURL(practiceTestingApi, `notes/${taskId}`)
         const response = await request.put(editNotesUrl, { form: payload, headers: { "x-auth-token": token } });
         expect(response.status()).toBe(200);
     }
 
-    async function deleteAllTasks(request: any): Promise<void> {
+    async function deleteAllTasks(request: APIRequestContext): Promise<void> {
         const response = await request.get(generateFullURL(practiceTestingApi, "notes"), { headers: { "x-auth-token": token } });
         const result = await response.json();
         const taskIds = result.data?.map((task: any) => task.id);

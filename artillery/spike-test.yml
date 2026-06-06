@@ -1,0 +1,17 @@
+config: 
+  target: "https://automationexercise.com/api"
+
+  phases: 
+    - duration: 60
+      arrivalRate: 5
+    
+    - duration: 30
+      arrivalRate: 50
+          
+    - duration: 60
+      arrivalRate: 5
+      
+scenarios:
+  - flow:
+    - get: 
+        url: "/productsList" 
