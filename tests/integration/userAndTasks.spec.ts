@@ -3,7 +3,7 @@ import { generateFullURL, practiceTestingApi } from "../../main/configuratons/co
 import { generateUserToRegister } from "../../main/utilities/UserCredentialsGenerator";
 import { PracticeLandingPage } from "../../main/pages/PracticeLandingPage";
 import { PracticeLoginPage } from "../../main/pages/PracticeLoginPage";
-import { taskToBeAdded } from "../../main/utilities/testDataGenerator";
+import { generateTaskToAdd } from "../../main/utilities/testDataGenerator";
 
 test.describe("User and Tasks API Tests", () => {
     const loginURL = generateFullURL(practiceTestingApi, "users/login");
@@ -34,7 +34,8 @@ test.describe("User and Tasks API Tests", () => {
         const token = loginResult.data.token;
         expect(token).toBeTruthy();
 
-        // Add task using UI
+        // Add task using API
+        const taskToBeAdded = generateTaskToAdd();
         const { title, category, description } = taskToBeAdded;
         const addTaskResponse = await request.post(notesUrl, { form: taskToBeAdded, headers: { "x-auth-token": token } });
         expect(addTaskResponse.status()).toBe(200);

@@ -112,4 +112,10 @@ export class PracticeLandingPage {
         await expect(this.page).toHaveURL("/profile");
     }
 
+    async verifyAllTasksCompleted() {
+        const progressInfo = this.page.getByTestId("progress-info");
+        const allNotesCompletedText = await progressInfo.textContent();
+        expect(allNotesCompletedText).toContain("You have completed all notes");
+    }
+
 }
