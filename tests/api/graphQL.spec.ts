@@ -24,6 +24,7 @@ test.describe("Demonstrate graphQL", () => {
         const countriesArray = countries.data.countries;
         const validate = ajv.compile(countriesSchema);
         expect(validate(countriesArray)).toBeTruthy();
+        console.table(countriesArray, ["code", "name", "capital", "currency"]);
     })
 
     async function getCountryDetails(request: APIRequestContext, code: string) {

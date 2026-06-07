@@ -1,6 +1,5 @@
 import test from "@playwright/test"
 import { TestLoginPage } from "../../main/pages/TestLoginPage"
-import { log } from "console";
 
 test.describe("Test login scenarios", () => {
     let loginPage: TestLoginPage;
@@ -20,14 +19,13 @@ test.describe("Test login scenarios", () => {
 
     test("User login test, invalid user", async ({ page }) => {
         await loginPage.loginUser("invalidUser", "SuperSecretPassword!");
-        // await loginPage.verifyInvalidUsernameMessage();
-        await loginPage.verifyInvalidPasswordMessage();
+        await loginPage.verifyInvalidFieldMessage();
         await loginPage.verifyUserStillOnLoginPage();
     })
 
     test("User login test, invalid password", async ({ page }) => {
         await loginPage.loginUser("practice", "invalidPassword!");
-        await loginPage.verifyInvalidPasswordMessage();
+        await loginPage.verifyInvalidFieldMessage();
         await loginPage.verifyUserStillOnLoginPage();
     })
 })

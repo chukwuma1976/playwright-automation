@@ -60,6 +60,11 @@ export class TestLoginPage {
         await expect(this.invalidPasswordMessage).toBeVisible();
     }
 
+    async verifyInvalidFieldMessage() {
+        await this.invalidUsernameMessage.or(this.invalidPasswordMessage).isVisible();
+        await expect(this.invalidUsernameMessage.or(this.invalidPasswordMessage)).toBeVisible();
+    }
+
     async verifyUserStillOnLoginPage() {
         expect(this.page.url()).toContain("/login");
     }
