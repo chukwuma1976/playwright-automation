@@ -10,8 +10,8 @@ export class PracticeLoginPage {
     constructor(private page: Page) {
         this.page = page;
         this.URL = generateFullURL(practiceTestingUi, "notes/app/login");
-        this.emailInput = page.getByLabel("Email");
-        this.passwordInput = page.getByLabel("Password");
+        this.emailInput = page.locator("#email");
+        this.passwordInput = page.locator("#password");
         this.loginButton = page.getByRole("button", { name: "Login" });
     }
 
@@ -27,5 +27,19 @@ export class PracticeLoginPage {
 
     async verifyUserOnLandingPage() {
         expect(this.page.url()).toBe("https://practice.expandtesting.com/notes/app");
+    }
+
+    async verifyUserStillOnLoginPage() {
+        expect(this.page.url()).toContain("/login");
+    }
+
+    async verifyUnauthorizedAccess() {
+        const unauthorized = this.page.getByText("Unauthorized Request");
+        await expect(unauthorized).toBeVisible();
+    }
+
+    async verifyForbiddenAccess() {
+        const forbidden = this.page.getByText("Forbidden");
+        await expect(forbidden).toBeVisible();
     }
 }

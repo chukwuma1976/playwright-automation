@@ -108,6 +108,16 @@ export class PracticeLandingPage {
         await expect(noteCard).toBeVisible();
     }
 
+    async verifyNoNotesAreDisplayed() {
+        const noNotes = this.page.getByText("You don't have any notes in all categories");
+        await expect(noNotes).toBeVisible();
+    }
+
+    async verifySpinnerIsPresent() {
+        const spinner = this.page.getByRole("status");
+        await expect(spinner).toBeVisible();
+    }
+
     async verifyNavigationToProfile() {
         await expect(this.page).toHaveURL("/profile");
     }

@@ -57,4 +57,20 @@ export const testUser2 = {
     password: "automation2password"
 }
 
+export const testUser3 = {
+    name: "automation3Tester",
+    email: "automation3@tester.com",
+    password: "automation3password"
+}
+
 export const testUsers = [testUser, testUser2, testUser2]
+
+export const jwtUser = {
+    username: "emilys",
+    password: "emilyspass"
+}
+
+export const jwtUser2 = {
+    username: "michaelw",
+    password: "michaelwpass"
+}
