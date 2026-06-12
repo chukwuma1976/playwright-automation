@@ -17,7 +17,7 @@ export class AlertsPage {
     async testAlertPopUp() {
         const alertButton = this.page.locator("#alert");
         await alertButton.click();
-        this.page.on('dialog', async dialog => {
+        this.page.once('dialog', async dialog => {
             console.log(`Dialog message: ${dialog.message()}`);
             await dialog.accept();
         });
@@ -29,13 +29,13 @@ export class AlertsPage {
         const confirmStatement = await confirmResult.textContent();
 
         await confirmButton.click();
-        this.page.on('dialog', async dialog => {
+        this.page.once('dialog', async dialog => {
             await dialog.accept();
         })
         expect(confirmStatement, "OK it is!");
 
         await confirmButton.click();
-        this.page.on('dialog', async dialog => {
+        this.page.once('dialog', async dialog => {
             await dialog.dismiss();
         })
         expect(confirmStatement, "Cancel it is!");
@@ -45,7 +45,7 @@ export class AlertsPage {
         const promptButton = this.page.locator("#prompt");
         const promptResult = this.page.locator("#promptResult");
 
-        this.page.on('dialog', async dialog => {
+        this.page.once('dialog', async dialog => {
             dialog.accept("Mr. Playwright");
         })
         await promptButton.click();

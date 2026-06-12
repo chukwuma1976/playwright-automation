@@ -8,3 +8,5 @@ node_modules/
 
 # Playwright
 /playwright/.auth/
+
+/downloads

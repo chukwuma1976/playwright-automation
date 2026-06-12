@@ -38,7 +38,7 @@ export class ContactUsPage {
 
         await this.page.locator('input[data-qa="submit-button"]').click();
 
-        this.page.on('dialog', async dialog => {
+        this.page.once('dialog', async dialog => {
             await dialog.accept();
             await this.page.getByRole('button', { name: 'OK' }).click();
         });
