@@ -1,9 +1,24 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
+import { generateFullURL, selectorsHub } from "../configuratons/config";
 
 export class DonationPage {
+    URL: string;
+    productsTab: Locator;
+    proPlansTab: Locator;
+    resourcesTab: Locator;
+    menuContent: Locator;
 
     constructor(private page: Page) {
         this.page = page;
+        this.URL = generateFullURL(selectorsHub, "donate");
+        this.productsTab = page.getByText("Products", { exact: true });
+        this.proPlansTab = page.getByText("Pro Plans", { exact: true });
+        this.resourcesTab = page.getByText("Resources", { exact: true }).first();
+        this.menuContent = page.locator(".e-n-menu-content");
+    }
+
+    async navigateToDonationPage() {
+        this.page.goto(this.URL);
     }
 
     async verifyOnDonationPage() {
@@ -56,5 +71,25 @@ export class DonationPage {
 
     async enterAmount(amount: string) {
         await this.page.locator("#customUnitAmount").fill(amount);
+    }
+
+    async hoverOverProducts() {
+        await this.productsTab.hover();
+        await this.verifyHoverMenuIsActive("SelectorsHubXPath & Selectors")
+    }
+
+    async hoverOverProPlans() {
+        await this.proPlansTab.hover();
+        await this.verifyHoverMenuIsActive("PROPRO SelectorsHub Pro Free")
+    }
+
+    async hoverOverResources() {
+        await this.resourcesTab.hover();
+        await this.verifyHoverMenuIsActive("Generative AI")
+    }
+
+    async verifyHoverMenuIsActive(content: string) {
+        const className = await this.menuContent.filter({ hasText: content }).getAttribute("class");
+        expect(className).toContain("active");
     }
 }
