@@ -7,7 +7,7 @@ export class AlertsPage {
 
     constructor(page: Page) {
         this.page = page;
-        this.alertsPageURL = generateFullURL(practiceAutomation, "/popups");
+        this.alertsPageURL = generateFullURL(practiceAutomation, "popups");
     }
 
     async navigateToAlertsPage() {
