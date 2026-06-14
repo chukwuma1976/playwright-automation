@@ -30,4 +30,13 @@ test.describe('Test playwright locators page with visual regression tesing', () 
 
     });
 
+    test.afterEach(async ({ page }, testInfo) => {
+        // capture a screenshot for attachment
+        const buffer = await page.screenshot();
+        await testInfo.attach('screenshot', {
+            body: buffer,
+            contentType: 'image/png'
+        });
+    })
+
 });
