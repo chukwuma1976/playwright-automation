@@ -13,42 +13,53 @@ test.describe("User adding and completing tasks", () => {
     let token: string;
     let task: { [key: string]: string };
     let taskId: string;
+    let practiceLandingPage: PracticeLandingPage;
 
     test("User adds and marks task as complete through API and verifies it in UI", async ({ page, request }) => {
-        //Login user through API
-        token = await loginAndRetrieveToken(request, testUser2);
 
-        //Add task using token
-        task = generateTaskToAdd();
-        const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
-        expect(response.status()).toBe(200);
-        const result = await response.json();
-        taskId = result.data.id;
-        expect(taskId).toBeTruthy();
+        await test.step("", async () => {
+            //Login user through API
+            token = await loginAndRetrieveToken(request, testUser2);
+        })
 
-        // Navigate to landing page
-        const practiceLandingPage = new PracticeLandingPage(page);
-        await practiceLandingPage.navigateToLandingPage();
+        await test.step("Add task using token", async () => {
+            task = generateTaskToAdd();
+            const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
+            expect(response.status()).toBe(200);
+            const result = await response.json();
+            taskId = result.data.id;
+            expect(taskId).toBeTruthy();
+        })
 
-        await page.evaluate((token: string) => {
-            localStorage.setItem("token", token);
-        }, token);
+        await test.step("Navigate to landing page", async () => {
+            practiceLandingPage = new PracticeLandingPage(page);
+            await practiceLandingPage.navigateToLandingPage();
 
-        // Verify presence of added task
-        await practiceLandingPage.navigateToLandingPage();
-        await new PracticeLoginPage(page).verifyUserOnLandingPage();
+            await page.evaluate((token: string) => {
+                localStorage.setItem("token", token);
+            }, token);
+        })
 
-        await practiceLandingPage.clickAllTab();
-        await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+        await test.step("Verify presence of added task", async () => {
+            // 
+            await practiceLandingPage.navigateToLandingPage();
+            await new PracticeLoginPage(page).verifyUserOnLandingPage();
 
-        // Edit task by updating completed status to true and updating all fields except id
-        const completeTaskPayload: any = { completed: true };
-        await completeTaskWithAPI(request, completeTaskPayload);
+            await practiceLandingPage.clickAllTab();
+            await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+        })
 
-        // Verify task is completed
-        await page.reload();
-        await practiceLandingPage.clickAllTab();
-        await practiceLandingPage.verifyAllTasksCompleted();
+        await test.step("Edit task by updating completed status to true and updating all fields except id", async () => {
+            const completeTaskPayload: any = { completed: true };
+            await completeTaskWithAPI(request, completeTaskPayload);
+        })
+
+        await test.step("Verify task is completed", async () => {
+            await page.reload();
+            await practiceLandingPage.clickAllTab();
+            await practiceLandingPage.verifyAllTasksCompleted();
+        })
+
     })
 
     test.afterEach("Cleanup by deleting all tasks", async ({ request }) => {

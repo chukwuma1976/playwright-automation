@@ -8,35 +8,46 @@ import { PracticeLoginPage } from "../../main/pages/PracticeLoginPage";
 test("Demo API and UI Integration Test", async ({ page, request }) => {
     const loginURL: string = generateFullURL(practiceTestingApi, "users/login");
     const notesUrl = generateFullURL(practiceTestingApi, "notes");
+    let token: string;
+    let practiceLandingPage: PracticeLandingPage;
+    let task: any;
+    let taskId: string;
 
-    //Login user through API using testUser credentials and get token
-    const loginResponse = await request.post(loginURL, { form: testUser });
-    const LoginResult = await loginResponse.json();
-    const token = LoginResult.data.token;
+    await test.step("Login user through API using testUser credentials and get token", async () => {
+        const loginResponse = await request.post(loginURL, { form: testUser });
+        const LoginResult = await loginResponse.json();
+        token = LoginResult.data.token;
 
-    //Add task through API using token and obtain id of task for further api requests
-    const task = generateTaskToAdd();
-    const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
-    expect(response.status()).toBe(200);
-    const result = await response.json();
-    const taskId = result.data.id;
-    expect(taskId).toBeTruthy();
+    })
 
-    // Navigate to landing page directly with web token and verify successful navigation
-    const practiceLandingPage = new PracticeLandingPage(page);
+    await test.step("Add task through API using token and obtain id of task for further api requests", async () => {
+        task = generateTaskToAdd();
+        const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        taskId = result.data.id;
+        expect(taskId).toBeTruthy();
+    })
 
-    await practiceLandingPage.navigateToLandingPage();
-    await page.evaluate((token: string) => {
-        localStorage.setItem("token", token);
-    }, token);
-    await practiceLandingPage.navigateToLandingPage();
-    await new PracticeLoginPage(page).verifyUserOnLandingPage();
+    await test.step("Navigate to landing page directly with web token and verify successful navigation", async () => {
+        practiceLandingPage = new PracticeLandingPage(page);
 
-    // Verify presence of added task in UI
-    await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+        await practiceLandingPage.navigateToLandingPage();
+        await page.evaluate((token: string) => {
+            localStorage.setItem("token", token);
+        }, token);
+        await practiceLandingPage.navigateToLandingPage();
+        await new PracticeLoginPage(page).verifyUserOnLandingPage();
+    })
 
-    // Cleanup by deleting task
-    const deleteNotesUrl = generateFullURL(practiceTestingApi, `notes/${taskId}`);
-    const deleteResponse = await request.delete(deleteNotesUrl, { headers: { "x-auth-token": token } });
-    expect(deleteResponse.status()).toBe(200);
+    await test.step("Verify presence of added task in UI", async () => {
+        await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+    })
+
+    await test.step("Cleanup by deleting task", async () => {
+        const deleteNotesUrl = generateFullURL(practiceTestingApi, `notes/${taskId}`);
+        const deleteResponse = await request.delete(deleteNotesUrl, { headers: { "x-auth-token": token } });
+        expect(deleteResponse.status()).toBe(200);
+    })
+
 })

@@ -14,48 +14,60 @@ test.describe("User adding tasks", () => {
     let task: { [key: string]: string };
     let taskId: string;
 
+    let practiceLandingPage: PracticeLandingPage;
+    let updatedTask: any;
+
     test("User adds and edits task through API and verifies it in UI", async ({ page, request }) => {
-        //Login user through API
-        token = await loginAndRetrieveToken(request, testUser1);
 
-        //Add task using token
-        task = generateTaskToAdd();
-        const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
-        expect(response.status()).toBe(200);
-        const result = await response.json();
-        taskId = result.data.id;
-        expect(taskId).toBeTruthy();
+        await test.step("Login user through API", async () => {
+            token = await loginAndRetrieveToken(request, testUser1);
+        })
 
-        // Navigate to landing page
-        const practiceLandingPage = new PracticeLandingPage(page);
-        await practiceLandingPage.navigateToLandingPage();
+        await test.step("Add task using token", async () => {
+            task = generateTaskToAdd();
+            const response = await request.post(notesUrl, { form: task, headers: { "x-auth-token": token } });
+            expect(response.status()).toBe(200);
+            const result = await response.json();
+            taskId = result.data.id;
+            expect(taskId).toBeTruthy();
+        })
 
-        await page.evaluate((token: string) => {
-            localStorage.setItem("token", token);
-        }, token);
+        await test.step(" Navigate to landing page", async () => {
+            practiceLandingPage = new PracticeLandingPage(page);
+            await practiceLandingPage.navigateToLandingPage();
 
-        // Verify presence of added task
-        await practiceLandingPage.navigateToLandingPage();
-        await new PracticeLoginPage(page).verifyUserOnLandingPage();
+            await page.evaluate((token: string) => {
+                localStorage.setItem("token", token);
+            }, token);
+        })
 
-        await practiceLandingPage.clickTab(task.category);
-        await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+        await test.step("Verify presence of added task", async () => {
+            await practiceLandingPage.navigateToLandingPage();
+            await new PracticeLoginPage(page).verifyUserOnLandingPage();
 
-        await practiceLandingPage.clickAllTab();
-        await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+            await practiceLandingPage.clickTab(task.category);
+            await practiceLandingPage.verifyNoteIsDisplayed(task.title);
 
-        // Edit task by updating completed status to true and updating all fields except id
-        const update = generateTaskToAdd();
-        const updatedTask: any = { ...update, id: taskId, completed: true };
-        await editTaskWithAPI(request, updatedTask);
+            await practiceLandingPage.clickAllTab();
+            await practiceLandingPage.verifyNoteIsDisplayed(task.title);
+        })
 
-        // Verify task is updated
-        await page.reload();
-        await practiceLandingPage.clickAllTab();
-        await practiceLandingPage.verifyNoteIsDisplayed(updatedTask.title);
+        await test.step("Edit task by updating completed status to true and updating all fields except id", async () => {
+            const update = generateTaskToAdd();
+            updatedTask = { ...update, id: taskId, completed: true };
+            await editTaskWithAPI(request, updatedTask);
+        })
 
-        // Cleanup by deleting all tasks
-        await deleteAllTasks(request);
+        await test.step("Verify task is updated", async () => {
+            await page.reload();
+            await practiceLandingPage.clickAllTab();
+            await practiceLandingPage.verifyNoteIsDisplayed(updatedTask.title);
+        })
+
+        await test.step("Cleanup by deleting all tasks", async () => {
+            await deleteAllTasks(request);
+        })
+
     })
 
     async function loginAndRetrieveToken(request: APIRequestContext, credentials: { [key: string]: string }): Promise<string> {
