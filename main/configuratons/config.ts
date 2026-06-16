@@ -8,6 +8,7 @@ export const httpBinAPI = "https://httpbin.org"
 export const practiceTestingUi = "https://practice.expandtesting.com"
 export const practiceTestingApi = "https://practice.expandtesting.com/notes/api";
 export const dummyJsonAPI = "https://dummyjson.com";
+export const applitoolsUiUrl = "https://demo.applitools.com";
 
 export const generateFullURL = (baseURL: string, path: string = "") => `${baseURL}/${path}`;
 export const generateLocatorURL = (baseURL: string, path: string = "") => `${baseURL}${path}`;
