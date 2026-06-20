@@ -28,7 +28,7 @@ export class ApplitoolsPage {
     }
 
     async verifyOnLandingPage() {
-        await expect(this.page.url()).toContain("/app.html");
+        expect(this.page.url()).toContain("/app.html");
     }
 
 }
