@@ -1,4 +1,6 @@
 import { expect, Page } from '@playwright/test'
+import path from 'path';
+import fs from 'fs';
 
 export class PaymentPage {
     page: Page;
@@ -26,9 +28,19 @@ export class PaymentPage {
     }
 
     async downloadInvoice() {
+        // wait for download event prior to download button action
         const downloadPromise = this.page.waitForEvent('download');
         await this.page.getByText('Download Invoice').click();
         const download = await downloadPromise;
-        expect(download.url()).toBeTruthy();
+
+        // save download to downloads folder in root directory
+        const directory = path.join("./downloads/", download.suggestedFilename());
+        await download.saveAs(directory);
+        expect(fs.existsSync(directory)).toBeTruthy();
+
+        // extract data and validate
+        const buffer = fs.readFileSync(directory);
+        const invoice = buffer.toString();
+        expect(invoice).toContain("Your total purchase amount");
     }
 }

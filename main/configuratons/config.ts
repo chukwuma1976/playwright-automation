@@ -11,6 +11,7 @@ export const dummyJsonAPI = "https://dummyjson.com";
 export const applitoolsUiUrl = "https://demo.applitools.com";
 export const restfulBookerApiUrl = "https://automationintesting.online/api"
 export const restfulBookerUiUrl = "https://automationintesting.online/"
+export const automationTestingUIUrl = "https://demo.automationtesting.in"
 
 export const generateFullURL = (baseURL: string, path: string = "") => `${baseURL}/${path}`;
 export const generateLocatorURL = (baseURL: string, path: string = "") => `${baseURL}${path}`;
