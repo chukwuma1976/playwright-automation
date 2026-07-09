@@ -143,7 +143,9 @@ test.describe("Mock API", () => {
 
     test("Login with mock service error on landing page", async ({ page }) => {
 
-        // Mock server error from notes API
+        // 1. Determine what resource needs to be mocked: this endpoint **/notes/api/notes
+        // 2. Network interception
+        // 3. Provide predicatable data (stubbing)
         await page.route("**/notes/api/notes", async route => {
 
             await route.fulfill({
@@ -153,12 +155,15 @@ test.describe("Mock API", () => {
 
         });
 
+        // 4. Execute test
         await page.goto(notesUIUrl);
         const loginPage = new PracticeLoginPage(page);
         await loginPage.loginUser(testUser1.email, testUser1.password);
 
+        // 5. Verify behavior: In this case status code of 500 and still on landing page
         page.on("response", async response => {
             if (response.url().includes("notes/api/notes")) {
+                console.log("Response url: ", response.url())
                 expect(response.status()).toBe(500);
             };
         })
