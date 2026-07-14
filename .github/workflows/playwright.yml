@@ -37,6 +37,7 @@ jobs:
           retention-days: 30
 
     merge-reports:
+      if: always()
       needs: playwright-shard-test
       runs-on: ubuntu-latest
 
