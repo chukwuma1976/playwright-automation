@@ -1,5 +1,4 @@
 import test, { expect } from "@playwright/test";
-import { generateFullURL, practiceAutomation } from "../../main/configuratons/config";
 import { AlertsPage } from "../../main/pages/AlertsPage";
 
 test.describe('Testing all sorts of popups', () => {

@@ -24,8 +24,7 @@ export class LandingPage {
     async userIsLoggedIn() {
         await this.waitForPageToLoad();
         const loggedInUser = this.page.locator(this.loggedInSelector);
-        await this.page.waitForSelector(this.loggedInSelector, { state: 'visible', timeout: 30000 });
-        expect(loggedInUser).toBeVisible();
+        await expect(loggedInUser).toBeVisible();
     }
 
     async logOut() {

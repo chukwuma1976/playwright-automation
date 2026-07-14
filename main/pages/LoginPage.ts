@@ -30,8 +30,7 @@ export class LoginPage {
     async invalidCredentialsErrorIsVisible() {
         const errorSelector = 'p:has-text("Your email or password")';
         const error = this.page.locator(errorSelector);
-        await this.page.waitForSelector(errorSelector, { state: 'visible', timeout: 30000 });
-        expect(error).toBeVisible();
+        await expect(error).toBeVisible();
     }
 
     async emailAddressExistsErrorIsVisble() {

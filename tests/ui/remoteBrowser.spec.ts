@@ -4,7 +4,7 @@ import { AlertsPage } from "../../main/pages/AlertsPage";
 
 test.describe("Let's talk about remote browsers", () => {
 
-    test.skip("Create remoted connection with connect method", async () => {
+    test.skip("Create remote connection with connect method", async () => {
         // This is for educational purposes only, the endpoint is fake
         const browser = await chromium.connect("ws://remote-host:9222");
         const context = browser.contexts()[0];
@@ -17,7 +17,7 @@ test.describe("Let's talk about remote browsers", () => {
         await page2.goto(generateFullURL(playwright_dev_locators));
     })
 
-    test("Create remoted connection by launching a server then using connect method", async () => {
+    test("Create remote connection by launching a server then using connect method", async () => {
         const server = await chromium.launchServer();
         const endpoint = server.wsEndpoint();
         const browser = await chromium.connect(endpoint);

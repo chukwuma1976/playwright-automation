@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { generateFullURL, petStoreAPI } from "../../main/configuratons/config";
 import { petPayload } from "../../main/utilities/petApiData";
+import fs from "fs";
 
 test.describe('Pet Store API Tests', () => {
 
@@ -45,6 +46,24 @@ test.describe('Pet Store API Tests', () => {
         // Now, delete the pet
         console.log(`Deleting pet with ID: ${petPayload.id}`);
         const response = await request.delete(generateFullURL(petStoreAPI, `pet${petPayload.id}`));
+    });
+
+    test('Add a image to pet', async ({ request }) => {
+
+        const dogImageFile = {
+            file: {
+                name: "dog_image_for_upload.jpg",
+                mimeType: "image/jpeg",
+                buffer: fs.readFileSync("./main/resources/dog_image_for_upload.jpg")
+            }
+        }
+
+        const response = await request
+            .post(generateFullURL(petStoreAPI, `pet/${petPayload.id}/uploadImage`), { multipart: dogImageFile });
+        const result = await response.json();
+        expect(response.status()).toBe(200);
+        expect(result.code).toBe(200);
+        expect(result.message).toContain(dogImageFile.file.name);
     });
 
 });

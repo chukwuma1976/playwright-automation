@@ -15,7 +15,7 @@ export class FileUploadPage {
     }
 
     async fileUpload() {
-        await this.page.setInputFiles("input[type='file']", "main/resources/testUpload.txt");
+        await this.page.locator("input[type='file']").setInputFiles("main/resources/testUpload.txt");
     }
 
 }
