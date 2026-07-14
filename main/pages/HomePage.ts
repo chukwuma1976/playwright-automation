@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect, Locator, Page, Route } from "@playwright/test";
 
 export class HomePage {
 
@@ -29,7 +29,7 @@ export class HomePage {
         this.recommendedItemsHeader = page.locator('h2').filter({ hasText: "recommended items" });
         this.carousel = page.locator("div.carousel-inner").nth(1);
         this.scrollToTopArrow = page.locator('a#scrollUp');
-        this.confirmationHeader = page.locator('h2').filter({ hasText: 'Full-Fledged practice website for Automation Engineers' }).first();
+        this.confirmationHeader = page.getByAltText("Website for automation practice");
     }
 
     async navigateToHomePage() {
@@ -97,13 +97,17 @@ export class HomePage {
 
     async scrollToTopWithArrowAndConfirm() {
         await this.scrollToTopArrow.click();
-        await this.confirmationHeader.isVisible();
         expect(this.confirmationHeader).toBeVisible();
     }
 
     async scrollToTopWithoutArrowAndConfirm() {
         await this.confirmationHeader.isVisible();
-        await this.confirmationHeader.click();
         expect(this.confirmationHeader).toBeVisible();
+    }
+
+    async blockGooglePopup() {
+        await this.page.route("**/#google_vignette", (route) => {
+            route.abort();
+        })
     }
 }
