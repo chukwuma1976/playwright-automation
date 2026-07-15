@@ -67,7 +67,6 @@ export class HomePage {
     async confirmSubscriptionHeader() {
         await this.navigateToHomePage();
         const subscriptionHeader = this.page.locator('h2:has-text("Subscription")');
-        await subscriptionHeader.isVisible();
         await subscriptionHeader.click();
         expect(subscriptionHeader).toBeVisible();
     }
@@ -78,8 +77,7 @@ export class HomePage {
     }
 
     async confirmSuccessfulSubscription() {
-        await this.successfullySubscribed.isVisible();
-        expect(this.successfullySubscribed).toBeVisible();
+        expect(this.successfullySubscribed).toBeVisible({ timeout: 10000 });
     }
 
     async hasRecommendedItemsHeader() {

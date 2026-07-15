@@ -40,7 +40,7 @@ export class IFramePage {
 
         const seleniumIframe = this.page.frameLocator("#iframe-2");
         await seleniumIframe.getByRole("button", { name: "Search" }).click();
-        await seleniumIframe.locator("input#docsearch-input").fill("frames");
+        await seleniumIframe.locator("input#docsearch-input").fill("iframes");
         await seleniumIframe.getByRole("option").filter({ hasText: "iFrames" }).first().click();
         await seleniumIframe.locator("h1").filter({ hasText: "Working with IFrames" }).click();
         await seleniumIframe.locator("code").filter({ hasText: "seleniumhq.github.io" }).click();

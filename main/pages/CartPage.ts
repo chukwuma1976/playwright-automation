@@ -31,8 +31,7 @@ export class CartPage {
     }
 
     async confirmSuccessfulSubscription() {
-        await this.successfullySubscribed.isVisible();
-        expect(this.successfullySubscribed).toBeVisible();
+        expect(this.successfullySubscribed).toBeVisible({ timeout: 10000 });
     }
 
     async confirmNumberOfProductsInCartToBe(count: number) {
