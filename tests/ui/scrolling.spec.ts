@@ -9,11 +9,13 @@ test.describe('Scrolling UI tests', () => {
     })
 
     test('Verify Scroll Up using Arrow button and Scroll Down functionality', async ({ page }) => {
+        await homePage.blockGooglePopup();
         await homePage.confirmSubscriptionHeader();
         await homePage.scrollToTopWithArrowAndConfirm();
     })
 
     test('Verify Scroll Up without Arrow button and Scroll Down functionality', async ({ page }) => {
+        await homePage.blockGooglePopup();
         await homePage.confirmSubscriptionHeader();
         await homePage.scrollToTopWithoutArrowAndConfirm();
     })

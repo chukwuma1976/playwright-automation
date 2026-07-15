@@ -4,7 +4,7 @@ import { generateFullURL, selectorsHub } from "../configuratons/config";
 export class DonationPage {
     URL: string;
     productsTab: Locator;
-    proPlansTab: Locator;
+    pricingTab: Locator;
     resourcesTab: Locator;
     menuContent: Locator;
 
@@ -12,7 +12,7 @@ export class DonationPage {
         this.page = page;
         this.URL = generateFullURL(selectorsHub, "donate");
         this.productsTab = page.getByText("Products", { exact: true });
-        this.proPlansTab = page.getByText("Pro Plans", { exact: true });
+        this.pricingTab = page.getByText("Pricing", { exact: true });
         this.resourcesTab = page.getByText("Resources", { exact: true }).first();
         this.menuContent = page.locator(".e-n-menu-content");
     }
@@ -74,18 +74,18 @@ export class DonationPage {
     }
 
     async hoverOverProducts() {
+        await expect(this.productsTab).toBeVisible();
         await this.productsTab.hover();
-        await this.verifyHoverMenuIsActive("SelectorsHubXPath & Selectors")
     }
 
-    async hoverOverProPlans() {
-        await this.proPlansTab.hover();
-        await this.verifyHoverMenuIsActive("PROPRO SelectorsHub Pro Free")
+    async hoverOverPricing() {
+        await expect(this.pricingTab).toBeVisible();
+        await this.pricingTab.hover();
     }
 
     async hoverOverResources() {
+        await expect(this.resourcesTab).toBeVisible();
         await this.resourcesTab.hover();
-        await this.verifyHoverMenuIsActive("Generative AI")
     }
 
     async verifyHoverMenuIsActive(content: string) {

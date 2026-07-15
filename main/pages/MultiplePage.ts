@@ -9,7 +9,7 @@ export class MultiplePage {
     constructor(private page: Page) {
         this.page = page;
         this.baseUrl = generateFullURL(selectorsHub, "xpath-practice-page/");
-        this.donationButton = page.getByRole("link", { name: "Consider a small Donation and support" });
+        this.donationButton = page.getByTitle("Click to donate");
 
     }
 
