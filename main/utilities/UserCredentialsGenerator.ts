@@ -63,7 +63,13 @@ export const testUser3 = {
     password: "automation3password"
 }
 
-export const testUsers = [testUser, testUser2, testUser2]
+export const testUser4 = {
+    name: "automation4Tester",
+    email: "automation4@tester.com",
+    password: "automation4password"
+}
+
+export const testUsers = [testUser, testUser1, testUser2, testUser3, testUser4]
 
 export const jwtUser = {
     username: "emilys",

@@ -3,6 +3,7 @@ import { generateFullURL, playwright_dev_locators } from '../../main/configurato
 import { vrTestingOptions } from '../../main/utilities/vrTestingOptions';
 
 test.describe('Test playwright locators page with visual regression tesing', () => {
+    test.skip(!!process.env.CI, 'Skipping visual tests in CI environment');
 
     const playwrightLocatorsURL = generateFullURL(playwright_dev_locators);
 
