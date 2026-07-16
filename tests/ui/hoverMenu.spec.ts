@@ -20,7 +20,7 @@ test.describe("Test hover menu", () => {
         const masterDonationPage = new DonationPage(donationPage);
         await masterDonationPage.verifyOnDonationPage();
 
-        await masterDonationPage.hoverOverProPlans();
+        await masterDonationPage.hoverOverPricing();
         await masterDonationPage.hoverOverProducts();
         await masterDonationPage.hoverOverResources();
     })

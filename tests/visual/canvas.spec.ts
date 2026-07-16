@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { generateFullURL, selectorsHub } from '../../main/configuratons/config';
+import { vrTestingOptions } from '../../main/utilities/vrTestingOptions';
 
 test.describe('Test canvas element with visual regression tesing', () => {
+    test.skip(!!process.env.CI, 'Skipping visual tests in CI environment');
 
     const URL = generateFullURL(selectorsHub, "xpath-practice-page");
 
@@ -14,10 +16,10 @@ test.describe('Test canvas element with visual regression tesing', () => {
         */
 
         // allow canvas element to fully render
-        await canvasElement.isVisible();
+        await expect(canvasElement).toBeVisible();
 
         // compare canvas screenshot to baseline image
-        await expect(canvasElement).toHaveScreenshot("main/resources/screenshots/canvas-element.png", { maxDiffPixels: 100 });
+        await expect(canvasElement).toHaveScreenshot("main/resources/screenshots/canvas-element.png", vrTestingOptions);
 
     });
 

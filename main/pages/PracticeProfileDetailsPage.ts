@@ -31,8 +31,8 @@ export class PracticeProfileDetailsPage {
     async verifyProfileDetailsAreCorrect(email: string, name: string, phone: string, company: string) {
         await expect(this.email).toHaveValue(email);
         await expect(this.name).toHaveValue(name);
-        await expect(this.phone).toHaveValue(phone);
-        await expect(this.company).toHaveValue(company);
+        await expect(this.phone).toHaveValue(phone || "");
+        await expect(this.company).toHaveValue(company || "");
     }
 
     async verifyProfileDetailsAreCorrectWithId(id: string, email: string, name: string, phone: string, company: string) {

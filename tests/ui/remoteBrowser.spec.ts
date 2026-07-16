@@ -4,7 +4,7 @@ import { AlertsPage } from "../../main/pages/AlertsPage";
 
 test.describe("Let's talk about remote browsers", () => {
 
-    test.skip("Create remote connection with connect method", async () => {
+    test.skip("Create remote connection with connect method, educational only", async () => {
         // This is for educational purposes only, the endpoint is fake
         const browser = await chromium.connect("ws://remote-host:9222");
         const context = browser.contexts()[0];
@@ -17,19 +17,31 @@ test.describe("Let's talk about remote browsers", () => {
         await page2.goto(generateFullURL(playwright_dev_locators));
     })
 
-    test("Create remote connection by launching a server then using connect method", async () => {
+    test("remote connection", async () => {
         const server = await chromium.launchServer();
-        const endpoint = server.wsEndpoint();
-        const browser = await chromium.connect(endpoint);
-        const context = await browser.newContext();
-        const page = await context.newPage();
 
-        const alertsPage = new AlertsPage(page);
-        await alertsPage.navigateToAlertsPage();
-        expect(page.url()).toContain("popups");
-        await alertsPage.testAlertPopUp();
-        await alertsPage.testConfirmPopUp();
-        await alertsPage.testTooltipPopUp();
+        try {
+            const browser = await chromium.connect(
+                server.wsEndpoint()
+            );
 
-    })
+            const context = await browser.newContext();
+            const page = await context.newPage();
+
+            const alertsPage = new AlertsPage(page);
+
+            await alertsPage.navigateToAlertsPage();
+
+            await expect(page).toHaveURL(/popups/);
+
+            await alertsPage.testAlertPopUp();
+            await alertsPage.testConfirmPopUp();
+            await alertsPage.testTooltipPopUp();
+
+            await browser.close();
+        }
+        finally {
+            await server.close();
+        }
+    });
 })
