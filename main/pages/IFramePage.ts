@@ -39,7 +39,7 @@ export class IFramePage {
         await this.page.waitForTimeout(2000); // Wait for 2 seconds to observe the actions in the iframe
 
         const seleniumIframe = this.page.frameLocator("#iframe-2");
-        await seleniumIframe.getByRole("button", { name: "Search" }).click();
+        await seleniumIframe.getByRole("button", { name: "Search" }).click({ timeout: 60000 });
         await seleniumIframe.locator("input#docsearch-input").fill("iframes");
         await seleniumIframe.getByRole("option").filter({ hasText: "iFrames" }).first().click();
         await seleniumIframe.locator("h1").filter({ hasText: "Working with IFrames" }).click();

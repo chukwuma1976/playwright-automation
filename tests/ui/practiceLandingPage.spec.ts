@@ -1,13 +1,13 @@
 import test from "@playwright/test";
 import { PracticeLandingPage } from "../../main/pages/PracticeLandingPage";
 import { PracticeLoginPage } from "../../main/pages/PracticeLoginPage";
-import { testUser } from "../../main/utilities/UserCredentialsGenerator";
+import { testUser4 } from "../../main/utilities/UserCredentialsGenerator";
 import { PracticeProfileDetailsPage } from "../../main/pages/PracticeProfileDetailsPage";
 
 test.describe("Practice landing page tasks tests", () => {
 
     let practiceLandingPage: PracticeLandingPage;
-    const { email, name, password } = testUser;
+    const { email, name, password } = testUser4;
 
     test.beforeEach(async ({ page }) => {
 
@@ -22,7 +22,7 @@ test.describe("Practice landing page tasks tests", () => {
         await practiceLandingPage.clickTab("Work");
         await practiceLandingPage.clickTab("Personal");
 
-        await practiceLandingPage.fillSearchInput("Another one");
+        await practiceLandingPage.fillSearchInput("Playwright");
         await practiceLandingPage.clickSearch();
 
         await practiceLandingPage.gotoProfile();
