@@ -19,7 +19,7 @@ export class HomePage {
 
     constructor(page: Page) {
         this.page = page;
-        this.contactUsLink = page.locator('a[href="/contact_us"]');
+        this.contactUsLink = page.getByRole("link", { name: "Contact us" });
         this.testCasesLink = page.locator('a[href="/test_cases"]').first();
         this.apiListLink = page.locator('a[href="/api_list"]').first();
         this.productsLink = page.locator('a[href="/products"]');
@@ -96,15 +96,16 @@ export class HomePage {
     async scrollToTopWithArrowAndConfirm() {
         await this.scrollToTopArrow.click();
         expect(this.confirmationHeader).toBeVisible();
+        await this.confirmationHeader.click();
     }
 
     async scrollToTopWithoutArrowAndConfirm() {
-        await this.confirmationHeader.isVisible();
         expect(this.confirmationHeader).toBeVisible();
+        await this.confirmationHeader.click();
     }
 
     async blockGooglePopup() {
-        await this.page.route("**/#google_vignette", (route) => {
+        await this.page.route("**pagead**", (route) => {
             route.abort();
         })
     }

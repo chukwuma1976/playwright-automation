@@ -30,7 +30,9 @@ export class PaymentPage {
     async downloadInvoice() {
         // wait for download event prior to download button action
         const downloadPromise = this.page.waitForEvent('download');
-        await this.page.getByText('Download Invoice').click();
+        const downloadButton = this.page.getByText('Download Invoice');
+        await expect(downloadButton).toBeVisible();
+        await downloadButton.click();
         const download = await downloadPromise;
 
         // save download to downloads folder in root directory

@@ -1,7 +1,7 @@
 import test, { expect } from "@playwright/test"
 import { PracticeLoginPage } from "../../main/pages/PracticeLoginPage";
 import { generateFullURL, practiceTestingUi } from "../../main/configuratons/config";
-import { testUser, testUser1, testUser2, testUser3 } from "../../main/utilities/UserCredentialsGenerator";
+import { testUser, testUser1, testUser2, testUser3, testUser4 } from "../../main/utilities/UserCredentialsGenerator";
 import { PracticeLandingPage } from "../../main/pages/PracticeLandingPage";
 
 test.describe("Mock API", () => {
@@ -178,7 +178,7 @@ test.describe("Mock API", () => {
 
         await page.goto(notesUIUrl);
         const loginPage = new PracticeLoginPage(page);
-        await loginPage.loginUser(testUser.email, testUser.password);
+        await loginPage.loginUser(testUser4.email, testUser4.password);
 
         page.on("response", async response => {
             if (response.url().includes("notes/api/notes")) {

@@ -7,12 +7,16 @@ import { PDFParse } from "pdf-parse";
 test.describe('PDF Download', () => {
 
     test("download pdf and check content", async ({ page }) => {
+
         // wait for download event prior to download button action
         const downloadPromise = page.waitForEvent("download");
+        const downloadBtn = page.getByRole("link", { name: "Download" });
+        await page.route("**pagead**", async route => route.abort());
 
         // navigate to page and download PDF
         await page.goto(generateFullURL(automationTestingUIUrl, "FileDownload.html"));
-        await page.getByRole("link", { name: "Download" }).click();
+        await expect(downloadBtn).toBeVisible();
+        await downloadBtn.click();
 
         // get PDF and save to downloads folder in root directory
         const download = await downloadPromise;
