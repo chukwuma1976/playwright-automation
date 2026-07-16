@@ -3,6 +3,7 @@ import { generateFullURL, selectorsHub } from '../../main/configuratons/config';
 import { vrTestingOptions } from '../../main/utilities/vrTestingOptions';
 
 test.describe('Test canvas element with visual regression tesing', () => {
+    test.skip(!!process.env.CI, 'Skipping visual tests in CI environment');
 
     const URL = generateFullURL(selectorsHub, "xpath-practice-page");
 

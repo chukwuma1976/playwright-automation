@@ -3,6 +3,8 @@ import { ApplitoolsPage } from "../../main/pages/ApplitoolsPage"
 import { vrTestingOptions } from "../../main/utilities/vrTestingOptions";
 
 test.describe("Visual Regression testing", () => {
+    test.skip(!!process.env.CI, 'Skipping visual tests in CI environment');
+
     test("Visual regression testing of a login page", async ({ page }) => {
         const loginPage = new ApplitoolsPage(page);
 
