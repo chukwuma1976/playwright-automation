@@ -10,7 +10,7 @@
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.59.1",
-    "@types/node": "^24.13.2"
+    "@types/node": "^24.13.3"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.12.1",
