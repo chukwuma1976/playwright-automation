@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { Ajv } from 'ajv';
+import { userPayload } from '../../main/utilities/testDataGenerator';
 
 test.describe('JSONPlaceholder Tests', () => {
 
@@ -10,7 +11,7 @@ test.describe('JSONPlaceholder Tests', () => {
         const users = await response.json();
         expect(response.ok()).toBeTruthy();
         expect(response.status()).toBe(200);
-        expect(users.length).toBeGreaterThan(0);
+        expect(users.length).toBe(10);
         expect(response.headers()['content-type']).toContain('application/json');
 
     });
@@ -35,6 +36,39 @@ test.describe('JSONPlaceholder Tests', () => {
     test('GET invalid user', async ({ request }) => {
         const response = await request.get(`${baseURL}/users/999`);
         expect(response.status()).toBe(404);
+    })
+
+    test("POST users", async ({ request }) => {
+        const response = await request.post(`${baseURL}/users`, { data: userPayload });
+        expect(response.status()).toBe(201);
+        const result = await response.json();
+        expect(result.id).toBeTruthy();
+    })
+
+    test("PUT users returns server error", async ({ request }) => {
+        const res = await request.post(`${baseURL}/users/`, { data: userPayload });
+        const user = await res.json();
+        const updatedPayload = { ...user, name: "Benjamin Reilly", username: "The Spider" };
+        const response = await request.put(`${baseURL}/users/${user.id}`, { data: updatedPayload });
+        expect(response.status()).toBe(500);
+    })
+
+    test("PATCH users", async ({ request }) => {
+        const res = await request.post(`${baseURL}/users/`, { data: userPayload });
+        const user = await res.json();
+        const patchPayload = { name: "Benjamin Reilly", username: "The Spider" };
+        const response = await request.patch(`${baseURL}/users/${user.id}`, { data: patchPayload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.name).toBe("Benjamin Reilly");
+        expect(result.username).toBe("The Spider");
+    })
+
+    test("DELETE users", async ({ request }) => {
+        const res = await request.post(`${baseURL}/users/`, { data: userPayload });
+        const user = await res.json();
+        const response = await request.delete(`${baseURL}/users/${user.id}`);
+        expect(response.status()).toBe(200);
     })
 
     const postIds = [1, 2, 3, 4, 5];
@@ -121,6 +155,221 @@ test.describe('JSONPlaceholder Tests', () => {
         expect(response.status()).toBe(200);
     });
 
+    test('GET /comments', async ({ request }) => {
+        const response = await request.get(`${baseURL}/comments`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.length).toBe(500);
+    });
+
+    test('GET /comments/1', async ({ request }) => {
+        const response = await request.get(`${baseURL}/comments/1`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result).toMatchObject({
+            postId: expect.any(Number),
+            id: expect.any(Number),
+            name: expect.any(String),
+            email: expect.any(String),
+            body: expect.any(String)
+        })
+    });
+
+    test('POST /comments', async ({ request }) => {
+        const payload = {
+            postId: 1,
+            name: 'A new comment',
+            email: 'Eliseo@gardner.biz',
+            body: 'I am speechless'
+        }
+        const response = await request.post(`${baseURL}/comments`, { data: payload });
+        expect(response.status()).toBe(201);
+        const result = await response.json();
+        expect(result.id).toBeTruthy();
+
+        // Also test delete
+        const res = await request.delete(`${baseURL}/comments/${result.id}`);
+        expect(res.status()).toBe(200);
+    });
+
+
+    test('PUT /comments/1', async ({ request }) => {
+        const payload = {
+            postId: 1,
+            id: 1,
+            name: 'Updated name',
+            email: 'Eliseo@gardner.biz',
+            body: 'laudantium enim quasi est quidem magnam voluptate ipsam eos\n' +
+                'tempora quo necessitatibus\n' +
+                'dolor quam autem quasi\n' +
+                'reiciendis et nam sapiente accusantium'
+        }
+        const response = await request.put(`${baseURL}/comments/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.name).toBe("Updated name");
+    });
+
+    test('PATCH /comments/1', async ({ request }) => {
+        const payload = { name: 'Updated name' };
+        const response = await request.put(`${baseURL}/comments/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.name).toBe("Updated name");
+    });
+
+    test('GET /albums', async ({ request }) => {
+        const response = await request.get(`${baseURL}/albums`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.length).toBe(100);
+    })
+
+    test('GET /albums/1', async ({ request }) => {
+        const response = await request.get(`${baseURL}/albums/1`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result).toMatchObject({
+            userId: expect.any(Number),
+            id: expect.any(Number),
+            title: expect.any(String)
+        })
+    })
+
+    test('POST /albums', async ({ request }) => {
+        const payload = { userId: 1, title: 'CA Smooth Vibes Album' };
+        const response = await request.post(`${baseURL}/albums`, { data: payload });
+        expect(response.status()).toBe(201);
+        const result = await response.json();
+        expect(result.id).toBeTruthy();
+
+        // Also test delete
+        const res = await request.delete(`${baseURL}/albums/${result.id}`);
+        expect(res.status()).toBe(200);
+    })
+
+    test('PUT /albums', async ({ request }) => {
+        const payload = { userId: 1, id: 1, title: 'CA Smooth Vibes Album' };
+        const response = await request.put(`${baseURL}/albums/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('CA Smooth Vibes Album');
+    })
+
+    test('PATCH /albums', async ({ request }) => {
+        const payload = { title: 'CA Smooth Vibes Album' };
+        const response = await request.patch(`${baseURL}/albums/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('CA Smooth Vibes Album');
+    })
+
+    test('GET /photos', async ({ request }) => {
+        const response = await request.get(`${baseURL}/photos`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.length).toBe(5000);
+    })
+
+    test('GET /photos/1', async ({ request }) => {
+        const response = await request.get(`${baseURL}/photos/1`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result).toMatchObject({
+            albumId: expect.any(Number),
+            id: expect.any(Number),
+            title: expect.any(String),
+            url: expect.any(String),
+            thumbnailUrl: expect.any(String)
+        })
+    })
+
+    test('POST /photos', async ({ request }) => {
+        const payload = {
+            albumId: 1,
+            title: 'Album Photo',
+            url: 'https://via.placeholder.com/600/92c952',
+            thumbnailUrl: 'https://via.placeholder.com/150/92c952'
+        };
+        const response = await request.post(`${baseURL}/photos`, { data: payload });
+        expect(response.status()).toBe(201);
+        const result = await response.json();
+        expect(result.id).toBeTruthy();
+
+        // Also test delete
+        const res = await request.delete(`${baseURL}/photos/${result.id}`);
+        expect(res.status()).toBe(200);
+    })
+
+    test('PUT /photos', async ({ request }) => {
+        const payload = {
+            albumId: 1,
+            id: 1,
+            title: 'My Album Photo',
+            url: 'https://via.placeholder.com/600/92c952',
+            thumbnailUrl: 'https://via.placeholder.com/150/92c952'
+        };
+        const response = await request.put(`${baseURL}/photos/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('My Album Photo');
+    })
+
+    test('PATCH /photos', async ({ request }) => {
+        const payload = { title: 'My Album Photo' };
+        const response = await request.patch(`${baseURL}/photos/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('My Album Photo');
+    })
+
+    //
+    test('GET /todos', async ({ request }) => {
+        const response = await request.get(`${baseURL}/todos`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.length).toBe(200);
+    })
+
+    test('GET /todos/1', async ({ request }) => {
+        const response = await request.get(`${baseURL}/todos/1`);
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result).toMatchObject({
+            userId: expect.any(Number),
+            id: expect.any(Number),
+            title: expect.any(String),
+            completed: expect.any(Boolean)
+        })
+    })
+
+    test('POST /todos', async ({ request }) => {
+        const payload = { userId: 1, title: 'Something to do', completed: false };
+        const response = await request.post(`${baseURL}/todos`, { data: payload });
+        expect(response.status()).toBe(201);
+        const result = await response.json();
+        expect(result.id).toBeTruthy();
+
+        // Also test delete
+        const res = await request.delete(`${baseURL}/todos/${result.id}`);
+        expect(res.status()).toBe(200);
+    })
+
+    test('PUT /todos', async ({ request }) => {
+        const payload = { userId: 1, id: 1, title: 'Something to do', completed: false };
+        const response = await request.put(`${baseURL}/todos/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('Something to do');
+    })
+
+    test('PATCH /todos', async ({ request }) => {
+        const payload = { title: 'Something to do' };
+        const response = await request.patch(`${baseURL}/todos/1`, { data: payload });
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        expect(result.title).toBe('Something to do');
+    })
 });
 
 interface User {
