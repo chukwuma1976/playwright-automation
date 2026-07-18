@@ -1,4 +1,4 @@
-import { Page, Response } from "@playwright/test";
+import { expect, Page, Response } from "@playwright/test";
 import { generateFullURL, practiceAutomation, selectorsHub } from "../configuratons/config";
 
 export class IFramePage {
@@ -25,7 +25,6 @@ export class IFramePage {
 
     async testIFrameInPracticeAutomation() {
         await this.page.goto(generateFullURL(practiceAutomation));
-        await this.page.waitForTimeout(2000); // Wait for 2 seconds to observe the actions in the iframe
 
         await this.page.locator("a").filter({ hasText: "IFrames" }).click();
 
@@ -36,10 +35,10 @@ export class IFramePage {
         await playwrightIframe.locator("header").filter({ hasText: "Frames" }).click();
         await playwrightIframe.locator("h2").filter({ hasText: "Introduction" }).click();
         await playwrightIframe.locator("code").filter({ hasText: "Locate element inside frame" }).click();
-        await this.page.waitForTimeout(2000); // Wait for 2 seconds to observe the actions in the iframe
 
         const seleniumIframe = this.page.frameLocator("#iframe-2");
-        await seleniumIframe.getByRole("button", { name: "Search" }).click({ timeout: 60000 });
+        await expect(this.page.getByRole("button", { name: "Search" })).toBeVisible();
+        await seleniumIframe.getByRole("button", { name: "Search" }).click();
         await seleniumIframe.locator("input#docsearch-input").fill("iframes");
         await seleniumIframe.getByRole("option").filter({ hasText: "iFrames" }).first().click();
         await seleniumIframe.locator("h1").filter({ hasText: "Working with IFrames" }).click();
@@ -49,7 +48,6 @@ export class IFramePage {
         await seleniumIframe.locator("#using-a-name-or-id").click();
         await seleniumIframe.locator("#using-an-index").click();
         await seleniumIframe.locator("#leaving-a-frame").click();
-        await this.page.waitForTimeout(2000); // Wait for 2 seconds to observe the actions in the iframe
     }
 
 }

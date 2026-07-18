@@ -26,7 +26,7 @@ export class PracticeLoginPage {
     }
 
     async verifyUserOnLandingPage() {
-        await this.page.getByRole("link", { name: "MyApp" }).isVisible();
+        await expect(this.page.getByRole("link", { name: "MyNotes" })).toBeVisible();
         expect(this.page.url()).toBe("https://practice.expandtesting.com/notes/app");
     }
 
