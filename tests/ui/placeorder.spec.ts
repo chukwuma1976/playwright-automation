@@ -37,7 +37,6 @@ test.describe('Placing Orders UI tests', () => {
     })
 
     test('Place Order: Register while Checkout', async ({ page }) => {
-
         await homePage.clickProducts();
 
         await productsPage.addProductToCart(0);
@@ -68,7 +67,7 @@ test.describe('Placing Orders UI tests', () => {
 
         await paymentPage.makePayment('Test User', '1234 5678 9101 1123', '123', '12', '2030');
         await paymentPage.confirmSuccessfulPaymentMessage();
-
+        await page.route("**www.google.com/ads**", async (route) => route.abort());
         await landingPage.clickDeleteAccountButton();
         await registrationPage.checkAccountDeletedHeaderIsVisible();
         await registrationPage.clickContinueButton();

@@ -45,8 +45,7 @@ export class ProductDetailPage {
 
     async confirmWriteYourReviewIsPresent() {
         const header = this.page.locator('a[href="#reviews"]');
-        await header.isVisible();
-        expect(header).toBeVisible();
+        await expect(header).toBeVisible();
     }
 
     async writeReview(name: string, email: string, review: string) {
@@ -58,8 +57,7 @@ export class ProductDetailPage {
 
     async confirmReviewReceivedMessage() {
         const reviewReceived = this.page.locator('div#review-section .alert-success');
-        await reviewReceived.isVisible();
-        expect(reviewReceived).toBeVisible();
+        await expect(reviewReceived).toBeVisible();
     }
 
 }

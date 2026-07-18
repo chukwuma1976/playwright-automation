@@ -9,8 +9,7 @@ export class RegistrationPage {
 
     async checkEnterAccountInformationHeaderIsVisible() {
         const enterAccountHeader = this.page.locator('h2:has-text("Enter Account Information")');
-        await enterAccountHeader.isVisible();
-        expect(enterAccountHeader).toBeVisible();
+        await expect(enterAccountHeader).toBeVisible();
     }
 
     async fillRegistrationForm(userCredentials: any) {
@@ -48,8 +47,7 @@ export class RegistrationPage {
 
     async checkAccountDeletedHeaderIsVisible() {
         const accountDeletedHeader = this.page.locator('h2:has-text("Account Deleted!")');
-        await accountDeletedHeader.isVisible();
-        expect(accountDeletedHeader).toBeVisible();
+        await expect(accountDeletedHeader).toBeVisible();
     }
 
     async clickContinueButton() {
