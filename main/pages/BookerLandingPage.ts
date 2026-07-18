@@ -29,6 +29,7 @@ export class BookerLandingPage {
     }
 
     async bookRoomByIndex(index: number) {
+        await expect(this.bookRoomBtn.nth(index)).toBeVisible();
         await this.bookRoomBtn.nth(index).click()
     }
 

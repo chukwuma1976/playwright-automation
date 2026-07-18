@@ -77,13 +77,12 @@ export class HomePage {
     }
 
     async confirmSuccessfulSubscription() {
-        expect(this.successfullySubscribed).toBeVisible({ timeout: 10000 });
+        expect(this.successfullySubscribed).toBeVisible();
     }
 
     async hasRecommendedItemsHeader() {
         await this.page.goto(this.baseURL);
-        await this.recommendedItemsHeader.isVisible();
-        expect(this.recommendedItemsHeader).toBeVisible();
+        await expect(this.recommendedItemsHeader).toBeVisible();
     }
 
     async selectRecommendedItem(item: string) {

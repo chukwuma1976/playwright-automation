@@ -35,8 +35,7 @@ export class LoginPage {
 
     async emailAddressExistsErrorIsVisble() {
         const errorMessage = this.page.locator('p:has-text("Email Address already exist!")');
-        await errorMessage.isVisible();
-        expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toBeVisible();
     }
 
     async hasNavigatedToLoginPage() {
