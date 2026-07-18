@@ -30,6 +30,11 @@ export const listOfInvalidOrMissingCredentials = [
     }
 ]
 
+export const invalidCredentials = {
+    email: "invalid@login.com",
+    password: "invalidpassword"
+}
+
 export const blankLoginCredentials = [
     {
         email: "",
