@@ -10,7 +10,7 @@ import { generateUser, generateUserCredentials } from '../../main/utilities/User
 import { userSchema } from '../../main/schemas/userSchema';
 import { User } from '../../main/interfaces/user';
 
-import { credentials, invalidCredentials, blankLoginCredentials } from '../../main/utilities/LoginCredentials';
+import { credentials, blankLoginCredentials, listOfInvalidOrMissingCredentials } from '../../main/utilities/LoginCredentials';
 
 const ajv = new Ajv();
 addFormats(ajv);
@@ -104,12 +104,17 @@ test.describe('Automation Exercise API Tests', () => {
         expect(searchResults.products.length).toBeGreaterThan(0);
     });
 
-    test('POST /searchProduct/missing search product', async ({ request }) => {
+    test('POST /searchProduct with missing query paramters', async ({ request }) => {
+        const searchQuery = {
+            // search_product: ""
+        }
 
-        const response = await request.post(`${baseURL}/searchProduct`);
-        const responseCode = await response.json();
+        const response = await request.post(`${baseURL}/searchProduct`, { form: searchQuery });
+        const searchResults = await response.json();
+        expect(response.ok()).toBeTruthy();
         expect(response.status()).toBe(200);
-        expect(responseCode.responseCode).toEqual(400);
+        expect(searchResults.responseCode).toBe(400);
+        expect(searchResults.message).toBe('Bad request, search_product parameter is missing in POST request.')
     });
 
     test('API login with valid credentials', async ({ request }) => {
@@ -124,16 +129,17 @@ test.describe('Automation Exercise API Tests', () => {
         expect(responseJson.message).toBe('User exists!');
     });
 
-    test('APT login with invalid credentials', async ({ request }) => {
+    listOfInvalidOrMissingCredentials.forEach((credentials, index) => {
+        test(`APT login with invalid credentials test number ${index + 1}"`, async ({ request }) => {
 
-        const response = await request.post(`${baseURL}/verifyLogin`, { form: invalidCredentials });
-        const responseJson = await response.json();
+            const response = await request.post(`${baseURL}/verifyLogin`, { form: credentials });
+            const responseJson = await response.json();
 
-        expect(response.status()).toBe(200);
-
-        expect(responseJson.responseCode).toBe(404);
-        expect(responseJson.message).toBe('User not found!');
-    });
+            expect(response.status()).toBe(200);
+            expect(responseJson.responseCode).toBe(404)
+            expect(responseJson.message).toBe("User not found!")
+        });
+    })
 
     test('Delete login', async ({ request }) => {
 
@@ -176,7 +182,7 @@ test.describe('Automation Exercise API Tests', () => {
         expect(deletedResponseJson.message).toBe('Account deleted!')
     });
 
-    test('PUT /createAccount with existing email', async ({ request }) => {
+    test('PUT /updateAccount with existing email', async ({ request }) => {
         const email = generateUserCredentials().email;
         const password = generateUserCredentials().password;
         const newUser = generateUser(email, password);
@@ -221,6 +227,25 @@ test.describe('Automation Exercise API Tests', () => {
         await request.delete(`${baseURL}/deleteAccount`, { form: { email, password } });
     })
 
+    test('GET /by user with invalid email', async ({ request }) => {
+
+        const response = await request.get(`${baseURL}/getUserDetailByEmail`, { params: { email: "invalidEmail" } });
+        const responseJson = await response.json();
+
+        expect(response.status()).toBe(200);
+        expect(responseJson.responseCode).toBe(404);
+        expect(responseJson.message).toBe('Account not found with this email, try another email!');
+    })
+
+    listOfInvalidOrMissingCredentials.forEach((credentials, index) => {
+        test(`attempt to delete using invalid credentials returns error #${index}`, async ({ request }) => {
+            const response = await request.delete(`${baseURL}/deleteAccount`, { form: credentials });
+            expect(response.status()).toBe(200);
+            const result = await response.json();
+            expect(result.responseCode).toBe(404);
+            expect(result.message).toBe("Account not found!");
+        })
+    })
 });
 
 

@@ -130,3 +130,27 @@ export const bookerAdminLoginPayload = {
     username: "admin",
     password: "password"
 }
+
+export const userPayload = {
+    "id": 1,
+    "name": "Ben Reilly",
+    "username": "spider Noir",
+    "email": "ben.reilly@gmail.com",
+    "address": {
+        "street": "Kulas Light",
+        "suite": "Apt. 556",
+        "city": "New York",
+        "zipcode": "92998-3874",
+        "geo": {
+            "lat": "-37.3159",
+            "lng": "81.1496"
+        }
+    },
+    "phone": "1-770-736-8031 x56442",
+    "website": "reillydetective.org",
+    "company": {
+        "name": "Reilly Detective Agency",
+        "catchPhrase": "With no power there is not responsibility",
+        "bs": "Catch the bad guys"
+    }
+}
