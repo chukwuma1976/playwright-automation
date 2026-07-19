@@ -37,7 +37,7 @@ export class IFramePage {
         await playwrightIframe.locator("code").filter({ hasText: "Locate element inside frame" }).click();
 
         const seleniumIframe = this.page.frameLocator("#iframe-2");
-        await expect(this.page.getByRole("button", { name: "Search" })).toBeVisible();
+        await expect(seleniumIframe.getByRole("button", { name: "Search" })).toBeVisible();
         await seleniumIframe.getByRole("button", { name: "Search" }).click();
         await seleniumIframe.locator("input#docsearch-input").fill("iframes");
         await seleniumIframe.getByRole("option").filter({ hasText: "iFrames" }).first().click();
